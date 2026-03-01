@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>creator® — Кабинет</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'><stop offset='0%25' stop-color='%23E8215A'/><stop offset='100%25' stop-color='%239B27AF'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='900' font-family='sans-serif' fill='url(%23g)'>c</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A0C;
+      --bg2: #111116;
+      --bg3: #16161C;
+      --text: #FFFFFF;
+      --muted: rgba(255,255,255,0.45);
+      --muted2: rgba(255,255,255,0.2);
+      --line: rgba(255,255,255,0.08);
+      --line2: rgba(255,255,255,0.12);
+      --grad: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+      --grad-text: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+      --red: #E8215A;
+      --purple: #9B27AF;
+      --sidebar: 240px;
+    }
+
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; }
+
+    .grad {
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .layout { display: flex; min-height: 100vh; background: var(--bg); }
+
+    .sidebar {
+      width: var(--sidebar);
+      background: var(--bg2);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      padding: 28px 16px;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+
+    .sidebar-logo {
+      text-decoration: none;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+      padding: 0 8px;
+      margin-bottom: 36px;
+    }
+
+    .logo-text {
+      font-weight: 900;
+      font-size: 22px;
+      letter-spacing: -1px;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo-reg {
+      font-size: 9px;
+      font-weight: 700;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      vertical-align: super;
+    }
+
+    .nav-section {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted2);
+      padding: 0 8px;
+      margin-bottom: 8px;
+      margin-top: 20px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-family: 'Nunito', sans-serif;
+      text-decoration: none;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .nav-item.active { background: rgba(232,33,90,0.12); color: var(--text); }
+    .nav-icon { font-size: 16px; opacity: 0.6; flex-shrink: 0; }
+    .nav-item.active .nav-icon { opacity: 1; }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .user-block {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .user-block:hover { background: rgba(255,255,255,0.05); }
+
+    .user-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .user-info { overflow: hidden; }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-email {
+      font-size: 11px;
+      color: var(--muted2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .main {
+      margin-left: var(--sidebar);
+      flex: 1;
+      padding: 40px 48px 80px;
+      min-height: 100vh;
+      background: var(--bg);
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+
+    .page-title { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; }
+    .page-subtitle { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+    .screen { display: none; animation: fadeIn 0.35s ease; }
+    .screen.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .stat-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
+    .stat-value { font-size: 36px; font-weight: 900; letter-spacing: -1px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-desc { font-size: 12px; color: var(--muted2); margin-top: 4px; }
+
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-title { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; }
+
+    .releases-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .release-card {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s, opacity 0.4s, transform 0.4s;
+    }
+
+    .release-card:hover { border-color: var(--line2); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    .release-card.removing {
+      opacity: 0;
+      transform: translateX(40px) scale(0.96);
+      pointer-events: none;
+    }
+
+    /* MICRO-ANIMATIONS */
+    .stat-card { transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .analytics-card { transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
+    .analytics-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .chart-card { transition: border-color 0.2s, box-shadow 0.2s; }
+    .chart-card:hover { border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .notif-item { transition: transform 0.2s, border-color 0.2s; }
+    .notif-item:hover { transform: translateX(4px); }
+    .btn-grad-sm { transition: opacity 0.2s, transform 0.15s; }
+    .btn-grad-sm:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-next { transition: opacity 0.2s, transform 0.15s; }
+    .btn-next:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    /* SKELETON LOADING */
+    .skeleton-card {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 14px;
+      padding: 18px 20px; display: flex; align-items: center; gap: 16px;
+    }
+    .sk-circle { width: 52px; height: 52px; border-radius: 8px; flex-shrink: 0; }
+    .sk-line { height: 14px; border-radius: 6px; }
+    .sk-line-sm { height: 10px; border-radius: 4px; }
+
+    /* DRAG TRACK */
+    .track-item.dragging { opacity: 0.4; background: rgba(155,39,175,0.08); }
+    .track-item.drag-target { border-color: rgba(155,39,175,0.6); background: rgba(155,39,175,0.06); }
+    .track-item-drag {
+      width: 20px; height: 28px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 2px;
+      cursor: grab; flex-shrink: 0; color: var(--muted2);
+      font-size: 11px; letter-spacing: 1px;
+    }
+    .track-item-drag:active { cursor: grabbing; }
+
+    /* PLATFORM CARDS */
+    .platforms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .platform-card {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 16px;
+      padding: 22px; display: flex; align-items: center; gap: 16px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .platform-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .platform-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 24px;
+    }
+    .platform-name { font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+    .platform-desc { font-size: 12px; color: var(--muted); }
+    .platform-status {
+      margin-left: auto; padding: 4px 10px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+    .platform-status.active { background: rgba(39,201,63,0.12); color: #27C93F; }
+    .platform-status.pending { background: rgba(255,189,46,0.12); color: #FFBD2E; }
+    .platform-status.soon { background: rgba(99,102,241,0.12); color: #818CF8; }
+
+    /* PREVIEW PHONE */
+    .phone-preview {
+      width: 280px; height: 500px; border-radius: 32px;
+      border: 3px solid var(--line2); background: #000;
+      padding: 16px; display: flex; flex-direction: column;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .phone-notch { width: 100px; height: 5px; background: var(--line2); border-radius: 3px; margin: 0 auto 16px; }
+    .phone-cover { width: 100%; aspect-ratio: 1; border-radius: 8px; background: var(--bg3); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 48px; overflow: hidden; }
+    .phone-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .phone-title { font-size: 16px; font-weight: 900; color: #fff; text-align: center; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .phone-artist { font-size: 13px; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 16px; }
+    .phone-progress { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 10px; overflow: hidden; }
+    .phone-progress-fill { height: 100%; width: 35%; border-radius: 2px; }
+    .phone-time { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
+    .phone-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
+    .phone-btn { color: rgba(255,255,255,0.7); font-size: 18px; cursor: default; }
+    .phone-btn.play { width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #000; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+    /* AUTOSAVE INDICATOR */
+    .autosave-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; color: var(--muted2);
+      padding: 4px 10px; border-radius: 6px;
+      background: rgba(39,201,63,0.08); border: 1px solid rgba(39,201,63,0.15);
+      transition: opacity 0.3s;
+    }
+    .autosave-badge.saving { color: #FFBD2E; background: rgba(255,189,46,0.08); border-color: rgba(255,189,46,0.15); }
+
+    .release-cover {
+      width: 52px; height: 52px;
+      border-radius: 8px;
+      background: var(--bg3);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      border: 1px solid var(--line);
+    }
+
+    .release-info { flex: 1; min-width: 0; }
+    .release-title { font-size: 15px; font-weight: 800; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .release-meta { font-size: 13px; color: var(--muted); }
+    .release-date { font-size: 12px; color: var(--muted2); flex-shrink: 0; text-align: right; }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
+    .status-pending { background: rgba(255,189,46,0.12); color: #FFBD2E; }
+    .status-pending::before { background: #FFBD2E; }
+    .status-review { background: rgba(99,102,241,0.12); color: #818CF8; }
+    .status-review::before { background: #818CF8; }
+    .status-published { background: rgba(39,201,63,0.12); color: #27C93F; }
+    .status-published::before { background: #27C93F; }
+    .status-rejected { background: rgba(232,33,90,0.12); color: #E8215A; }
+    .status-rejected::before { background: #E8215A; }
+
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty-state p { font-size: 15px; margin-bottom: 20px; }
+
+    .form-card {
+      background: var(--bg2);
+      border: 1px solid var(--line2);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .form-card-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mac-dots { display: flex; gap: 7px; }
+    .mac-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .mac-dot-r { background: #FF5F56; }
+    .mac-dot-y { background: #FFBD2E; }
+    .mac-dot-g { background: #27C93F; }
+    .form-card-header span { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+    .step-progress { display: flex; gap: 4px; padding: 20px 28px 0; }
+    .step-bar { height: 3px; flex: 1; border-radius: 2px; background: rgba(255,255,255,0.1); transition: background 0.3s; }
+    .step-bar.active { background: var(--grad); }
+    .step-bar.done { background: rgba(255,255,255,0.3); }
+
+    .form-body { padding: 24px 28px 28px; position: relative; overflow: hidden; }
+    .step-panel { display: none; }
+    .step-panel.active { display: block; animation: stepSlideIn 0.4s ease; }
+    @keyframes stepSlideIn {
+      from { opacity: 0; transform: translateX(30px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes stepSlideOut {
+      from { opacity: 1; transform: translateX(0); }
+      to   { opacity: 0; transform: translateX(-30px); }
+    }
+    .step-panel.slide-out { animation: stepSlideOut 0.25s ease forwards; }
+    .step-heading { font-size: 18px; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.4px; }
+    .step-desc { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+
+    /* TOOLTIPS */
+    .f-label-row { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+    .f-label-row label { margin-bottom: 0; }
+    .tooltip-wrap { position: relative; display: inline-flex; }
+    .tooltip-icon {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--line2);
+      font-size: 10px; font-weight: 800; color: var(--muted);
+      display: flex; align-items: center; justify-content: center;
+      cursor: help; flex-shrink: 0;
+    }
+    .tooltip-text {
+      position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+      background: var(--bg2); border: 1px solid var(--line2); border-radius: 10px;
+      padding: 10px 14px; font-size: 12px; font-weight: 500; color: var(--muted);
+      line-height: 1.5; white-space: normal; width: 240px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 20;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .tooltip-wrap:hover .tooltip-text { opacity: 1; pointer-events: auto; }
+
+    /* CUSTOM DATEPICKER */
+    .datepicker-wrap { position: relative; }
+    .datepicker-trigger {
+      width: 100%; padding: 11px 14px; padding-right: 40px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--line2);
+      border-radius: 10px; font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 500; color: var(--text);
+      outline: none; cursor: pointer; transition: border-color 0.2s;
+      text-align: left;
+    }
+    .datepicker-trigger:focus { border-color: rgba(155,39,175,0.6); }
+    .datepicker-trigger::after {
+      content: '📅'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      font-size: 16px; pointer-events: none;
+    }
+    .datepicker-trigger.placeholder { color: var(--muted); }
+
+    .dp-dropdown {
+      position: absolute; top: calc(100% + 6px); left: 0; z-index: 30;
+      background: var(--bg2); border: 1px solid var(--line2);
+      border-radius: 16px; padding: 16px; width: 300px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+      display: none; animation: fadeIn 0.2s ease;
+    }
+    .dp-dropdown.open { display: block; }
+    .dp-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    }
+    .dp-header-title { font-size: 15px; font-weight: 800; }
+    .dp-nav {
+      width: 30px; height: 30px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--line);
+      color: var(--muted); font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .dp-nav:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+    .dp-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 4px; }
+    .dp-weekday { text-align: center; font-size: 11px; font-weight: 700; color: var(--muted2); padding: 4px 0; }
+    .dp-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .dp-day {
+      text-align: center; padding: 8px 0; border-radius: 8px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      transition: background 0.15s, color 0.15s; color: var(--text);
+    }
+    .dp-day:hover { background: rgba(155,39,175,0.12); }
+    .dp-day.other { color: var(--muted2); }
+    .dp-day.today { border: 1px solid rgba(155,39,175,0.4); }
+    .dp-day.selected { background: var(--grad); color: #fff; font-weight: 800; }
+    .dp-day.past { color: var(--muted2); opacity: 0.4; cursor: not-allowed; }
+    body.light .dp-dropdown { background: var(--bg2); }
+    body.light .tooltip-text { background: var(--bg2); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+    body.light .datepicker-trigger { background: rgba(0,0,0,0.04); color: var(--text); }
+
+    .f-group { margin-bottom: 16px; }
+
+    .f-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .f-group input,
+    .f-group select,
+    .f-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line2);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .f-group input:focus,
+    .f-group select:focus,
+    .f-group textarea:focus { border-color: rgba(155,39,175,0.6); }
+    .f-group select option { background: #1a1a2e; }
+    .f-group textarea { resize: vertical; min-height: 80px; }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .upload-zone {
+      border: 2px dashed rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+
+    .upload-zone:hover { border-color: rgba(155,39,175,0.5); background: rgba(155,39,175,0.05); }
+    .upload-zone.drag-over { border-color: rgba(155,39,175,0.8); background: rgba(155,39,175,0.1); }
+    .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+    .upload-zone .u-icon { font-size: 32px; margin-bottom: 8px; }
+    .upload-zone p { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .upload-zone span { font-size: 11px; color: var(--muted2); }
+    .upload-zone .file-name { font-size: 13px; color: #27C93F; font-weight: 700; margin-top: 8px; }
+
+    .cover-preview-inline {
+      border-radius: 10px;
+    }
+
+    /* ARTIST PROFILE SYSTEM */
+    .artist-selector { margin-bottom: 20px; }
+    .artist-search-wrap { position: relative; }
+    .artist-search-wrap input { padding-right: 40px; }
+    .artist-search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--muted); pointer-events: none; }
+    .artist-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 30;
+      background: var(--bg2); border: 1px solid var(--line2); border-radius: 12px;
+      max-height: 240px; overflow-y: auto; display: none;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    }
+    .artist-dropdown.open { display: block; }
+    .artist-option {
+      padding: 10px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+      transition: background 0.15s; font-size: 13px; font-weight: 600;
+    }
+    .artist-option:hover { background: rgba(155,39,175,0.08); }
+    .artist-option:first-child { border-radius: 12px 12px 0 0; }
+    .artist-option:last-child { border-radius: 0 0 12px 12px; }
+    .artist-option .ao-avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .artist-option .ao-info { flex: 1; }
+    .artist-option .ao-name { font-weight: 800; }
+    .artist-option .ao-meta { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .artist-option.create-new { color: var(--red); border-top: 1px solid var(--line); }
+    .artist-option.create-new .ao-avatar { background: rgba(232,33,90,0.12); color: var(--red); font-size: 16px; }
+    .artist-selected {
+      display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+      background: rgba(155,39,175,0.06); border: 1px solid rgba(155,39,175,0.2);
+      border-radius: 10px; font-size: 13px; font-weight: 600;
+    }
+    .artist-selected .as-avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .artist-selected .as-info { flex: 1; }
+    .artist-selected .as-name { font-weight: 800; }
+    .artist-selected .as-meta { font-size: 11px; color: var(--muted); font-weight: 500; }
+    .artist-selected .as-remove { cursor: pointer; color: var(--muted); font-size: 16px; transition: color 0.2s; padding: 4px; }
+    .artist-selected .as-remove:hover { color: var(--red); }
+
+    /* ARTIST CARD MODAL */
+    .artist-form-inline {
+      background: rgba(155,39,175,0.04); border: 1px solid rgba(155,39,175,0.15);
+      border-radius: 14px; padding: 18px; margin-bottom: 16px;
+    }
+    .artist-form-inline .af-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;
+    }
+    .artist-form-inline .af-title { font-size: 14px; font-weight: 800; }
+    .artist-form-inline .af-close { cursor: pointer; color: var(--muted); font-size: 14px; }
+
+    /* TAG PILLS FOR FEAT ARTISTS */
+    .tag-container { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .tag-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(155,39,175,0.1); border: 1px solid rgba(155,39,175,0.2);
+      border-radius: 100px; padding: 4px 10px; font-size: 12px; font-weight: 700;
+    }
+    .tag-pill .tag-remove { cursor: pointer; color: var(--muted); font-size: 14px; margin-left: 2px; transition: color 0.2s; }
+    .tag-pill .tag-remove:hover { color: var(--red); }
+
+    /* CONTRIBUTOR ROLES */
+    .contributor-row {
+      display: flex; gap: 8px; align-items: center; margin-bottom: 8px;
+    }
+    .contributor-row input { flex: 1; }
+    .contributor-row select { width: 140px; flex-shrink: 0; }
+    .contributor-row .cr-remove { cursor: pointer; color: var(--muted); font-size: 16px; padding: 8px; transition: color 0.2s; }
+    .contributor-row .cr-remove:hover { color: var(--red); }
+    .add-contributor-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      cursor: pointer; padding: 6px 0; transition: color 0.2s;
+    }
+    .add-contributor-btn:hover { color: var(--text); }
+
+    /* TRACK CARDS ENHANCED */
+    .track-card-v2 {
+      background: var(--bg2); border: 1px solid var(--line2); border-radius: 12px;
+      padding: 12px 14px; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 12px;
+      transition: border-color 0.2s, transform 0.15s; cursor: grab;
+    }
+    .track-card-v2:hover { border-color: var(--line2); transform: translateY(-1px); }
+    .track-card-v2 .tc-num {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(155,39,175,0.1); color: #9B27AF;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; flex-shrink: 0;
+    }
+    .track-card-v2 .tc-info { flex: 1; min-width: 0; }
+    .track-card-v2 .tc-title { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-card-v2 .tc-meta { font-size: 11px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; }
+    .track-card-v2 .tc-meta span { display: flex; align-items: center; gap: 3px; }
+    .track-card-v2 .tc-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .track-card-v2 .tc-btn {
+      width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line);
+      background: transparent; color: var(--muted); font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+    }
+    .track-card-v2 .tc-btn:hover { background: rgba(155,39,175,0.1); color: var(--text); border-color: rgba(155,39,175,0.3); }
+    .track-card-v2 .tc-btn.delete:hover { background: rgba(232,33,90,0.1); color: var(--red); border-color: rgba(232,33,90,0.3); }
+
+    /* SUMMARY CARD ENHANCED */
+    .summary-section { margin-bottom: 14px; }
+    .summary-section .ss-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted2); margin-bottom: 6px; }
+    .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .summary-item { font-size: 13px; }
+    .summary-item .si-label { color: var(--muted); font-weight: 600; }
+    .summary-item .si-value { font-weight: 700; }
+    .summary-tracks { margin-top: 10px; }
+    .summary-track {
+      display: flex; align-items: center; gap: 8px; padding: 6px 0;
+      border-bottom: 1px solid var(--line); font-size: 12px;
+    }
+    .summary-track:last-child { border-bottom: none; }
+    .summary-track .st-num { color: var(--muted); font-weight: 700; width: 20px; }
+    .summary-track .st-title { font-weight: 700; flex: 1; }
+    .summary-track .st-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 700; }
+
+    /* SUBGENRE */
+    .f-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    body.light .artist-dropdown { background: var(--bg2); box-shadow: 0 12px 40px rgba(0,0,0,0.15); }
+    body.light .artist-option:hover { background: rgba(155,39,175,0.06); }
+    body.light .artist-form-inline { background: rgba(155,39,175,0.03); }
+    body.light .track-card-v2 { background: var(--bg2); }
+
+    .form-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 24px; }
+
+    .btn-back {
+      background: transparent;
+      border: 1px solid var(--line2);
+      color: var(--muted);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-back:hover { border-color: var(--muted); color: var(--text); }
+
+    .btn-next {
+      background: var(--grad);
+      border: none;
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-next:hover { opacity: 0.85; }
+    .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .success-screen { text-align: center; padding: 48px 28px; }
+
+    .success-icon {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: rgba(39,201,63,0.15);
+      border: 2px solid rgba(39,201,63,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+    }
+
+    .success-screen h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; }
+    .success-screen p { font-size: 15px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+
+    .profile-grid { display: grid; grid-template-columns: 280px 1fr; gap: 24px; max-width: 900px; }
+
+    .profile-card {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .profile-avatar-big {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--grad);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px;
+      font-weight: 900;
+      color: #fff;
+      margin: 0 auto 16px;
+    }
+
+    .profile-name-big { font-size: 18px; font-weight: 900; text-align: center; margin-bottom: 4px; }
+    .profile-email-big { font-size: 13px; color: var(--muted); text-align: center; margin-bottom: 20px; }
+
+    .profile-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+    }
+
+    .profile-stat span:first-child { color: var(--muted); }
+    .profile-stat span:last-child { font-weight: 700; }
+
+    .settings-card {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px;
+    }
+
+    .settings-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+
+    .btn-save {
+      background: var(--grad);
+      border: none;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-save:hover { opacity: 0.85; }
+
+    .btn-danger {
+      background: rgba(232,33,90,0.1);
+      border: 1px solid rgba(232,33,90,0.3);
+      color: #E8215A;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+
+    .btn-danger:hover { background: rgba(232,33,90,0.2); }
+
+    .btn-grad-sm {
+      background: var(--grad);
+      border: none;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-grad-sm:hover { opacity: 0.85; }
+
+    .notif-badge {
+      margin-left: auto;
+      background: var(--grad);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 100px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .notif-item {
+      background: var(--bg2);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .notif-item.unread {
+      border-color: rgba(155,39,175,0.3);
+      background: rgba(155,39,175,0.04);
+    }
+
+    .notif-item:hover { border-color: var(--line2); }
+
+    .notif-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+    }
+
+    .notif-title { font-size: 14px; font-weight: 800; margin-bottom: 3px; }
+    .notif-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .notif-time { font-size: 11px; color: var(--muted2); margin-top: 6px; }
+    .notif-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--grad);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .release-type-card {
+      border: 1px solid var(--line2);
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      background: transparent;
+    }
+
+    .release-type-card:hover {
+      border-color: rgba(155,39,175,0.4);
+      background: rgba(155,39,175,0.04);
+      transform: translateY(-2px);
+    }
+
+    .release-type-card.active {
+      border-color: rgba(155,39,175,0.6);
+      background: rgba(155,39,175,0.08);
+    }
+
+    .release-type-icon { font-size: 28px; margin-bottom: 8px; }
+    .release-type-name { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+    .release-type-desc { font-size: 12px; color: var(--muted); }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line2);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
+    .filter-btn.active {
+      background: rgba(232,33,90,0.12);
+      border-color: rgba(232,33,90,0.3);
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--bg2);
+      border: 1px solid var(--line2);
+      border-radius: 12px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+      max-width: 320px;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(39,201,63,0.4); }
+    .toast.error { border-color: rgba(232,33,90,0.4); }
+
+    /* PROGRESS BAR */
+    .progress-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .progress-overlay.show { opacity: 1; pointer-events: all; visibility: visible; }
+    .progress-box {
+      background: var(--bg2); border: 1px solid var(--line2);
+      border-radius: 20px; padding: 40px 48px; text-align: center;
+      width: 400px; max-width: 90vw;
+    }
+    .progress-box h3 { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+    .progress-box p { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: var(--grad); border-radius: 3px; transition: width 0.3s ease; }
+    .progress-percent { font-size: 28px; font-weight: 900; margin-top: 16px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* SKELETON */
+    .skeleton { border-radius: 8px; background: linear-gradient(90deg, var(--bg3) 25%, rgba(255,255,255,0.06) 50%, var(--bg3) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* TRACK LIST */
+    .track-item {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg3); border: 1px solid var(--line);
+      border-radius: 10px; padding: 12px 16px;
+      margin-bottom: 8px; animation: fadeIn 0.25s ease;
+    }
+    .track-item-num { font-size: 13px; font-weight: 800; color: var(--muted); width: 24px; text-align: center; flex-shrink: 0; }
+    .track-item-name { flex: 1; font-size: 14px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .track-item-size { font-size: 12px; color: var(--muted2); flex-shrink: 0; }
+    .track-item-remove {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: rgba(232,33,90,0.08); border: 1px solid rgba(232,33,90,0.2);
+      color: #E8215A; font-size: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; flex-shrink: 0;
+    }
+    .track-item-remove:hover { background: rgba(232,33,90,0.18); }
+    .track-item-edit {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: rgba(155,39,175,0.08); border: 1px solid rgba(155,39,175,0.2);
+      color: #9B27AF; font-size: 13px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; flex-shrink: 0;
+    }
+    .track-item-edit:hover { background: rgba(155,39,175,0.18); }
+    .track-item-status {
+      font-size: 11px; font-weight: 700; padding: 2px 8px;
+      border-radius: 6px; flex-shrink: 0;
+    }
+    .track-item-status.filled { background: rgba(39,201,63,0.1); color: #27C93F; }
+    .track-item-status.empty { background: rgba(255,189,46,0.1); color: #FFBD2E; }
+    .track-item-clickable { cursor: pointer; transition: background 0.15s; border-radius: 10px; }
+    .track-item-clickable:hover { background: rgba(155,39,175,0.06); }
+
+    /* ANALYTICS */
+    .analytics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+    .analytics-card {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 20px;
+    }
+    .analytics-card .a-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+    .analytics-card .a-value { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
+    .analytics-card .a-change { font-size: 12px; font-weight: 700; margin-top: 4px; }
+    .analytics-card .a-change.up { color: #27C93F; }
+    .analytics-card .a-change.down { color: #E8215A; }
+
+    .chart-card {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; padding: 24px;
+      margin-bottom: 20px;
+    }
+    .chart-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding-top: 10px; }
+    .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bar-fill { width: 100%; border-radius: 6px 6px 0 0; background: var(--grad); min-height: 4px; transition: height 0.6s ease; }
+    .bar-label { font-size: 11px; color: var(--muted2); font-weight: 600; }
+    .bar-value { font-size: 11px; font-weight: 800; color: var(--muted); }
+
+    .mobile-header {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--line);
+      padding: 0 20px;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .mobile-header { display: flex; }
+      .main { margin-left: 0; padding: 80px 20px 40px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .analytics-grid { grid-template-columns: 1fr 1fr; }
+      .profile-grid { grid-template-columns: 1fr; }
+      .f-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .analytics-grid { grid-template-columns: 1fr; }
+    }
+
+    /* THEME */
+    .theme-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6);
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .theme-btn:hover { background: rgba(255,255,255,0.1); }
+
+    body.light {
+      --bg: #F5F4F1;
+      --bg2: #FFFFFF;
+      --bg3: #EEECEA;
+      --text: #0A0A0C;
+      --muted: rgba(0,0,0,0.45);
+      --muted2: rgba(0,0,0,0.25);
+      --line: rgba(0,0,0,0.08);
+      --line2: rgba(0,0,0,0.12);
+    }
+
+    body.light .theme-btn { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); color: rgba(0,0,0,0.5); }
+    body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
+    body.light .f-group input,
+    body.light .f-group select,
+    body.light .f-group textarea { background: rgba(0,0,0,0.04); color: var(--text); }
+    body.light .f-group select option { background: #ffffff; color: #0A0A0C; }
+    body.light .upload-zone { border-color: rgba(0,0,0,0.15); }
+    body.light .user-block:hover, body.light .nav-item:hover { background: rgba(0,0,0,0.05); }
+    body.light .nav-item.active { background: rgba(232,33,90,0.08); }
+    body.light .modal-box, body.light .modal-header { background: var(--bg2); }
+    body.light .toast { background: var(--bg2); }
+    body.light .skeleton { background: linear-gradient(90deg, rgba(0,0,0,0.06) 25%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.06) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+
+    /* LOADING SCREEN */
+    .loading-screen {
+      position: fixed; inset: 0; z-index: 999;
+      background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      transition: opacity 0.5s, visibility 0.5s;
+    }
+    .loading-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loading-logo {
+      font-family: 'Nunito', sans-serif; font-size: 48px; font-weight: 900;
+      background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; position: relative;
+      animation: logoPulse 1.5s ease infinite;
+    }
+    .loading-logo .reg-mark {
+      font-size: 14px; font-weight: 700;
+      background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      vertical-align: super;
+    }
+    @keyframes logoPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.97); }
+    }
+    .loading-bar-track {
+      width: 120px; height: 3px; background: var(--line); border-radius: 2px;
+      margin-top: 20px; overflow: hidden;
+    }
+    .loading-bar-fill {
+      height: 100%; width: 30%; background: var(--grad); border-radius: 2px;
+      animation: loadSlide 1.2s ease infinite;
+    }
+    @keyframes loadSlide {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(400%); }
+    }
+
+    /* ONBOARDING */
+    .onboarding-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s;
+    }
+    .onboarding-overlay.show { opacity: 1; visibility: visible; }
+    .onboarding-card {
+      background: var(--bg2); border: 1px solid var(--line2);
+      border-radius: 24px; padding: 48px 40px; text-align: center;
+      max-width: 480px; width: 90%; position: relative;
+    }
+    .onboarding-step-icon { font-size: 56px; margin-bottom: 20px; display: block; }
+    .onboarding-step-title { font-size: 22px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.5px; }
+    .onboarding-step-desc { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+    .onboarding-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 28px; }
+    .onboarding-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--line2); transition: background 0.3s, width 0.3s;
+    }
+    .onboarding-dot.active { width: 24px; border-radius: 4px; background: var(--grad); }
+    .onboarding-actions { display: flex; gap: 12px; justify-content: center; }
+    .onboarding-skip {
+      background: none; border: none; color: var(--muted2);
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      font-family: 'Nunito', sans-serif; padding: 8px 16px;
+      transition: color 0.2s;
+    }
+    .onboarding-skip:hover { color: var(--muted); }
+    .onboarding-next {
+      background: var(--grad); color: #fff; border: none;
+      padding: 10px 28px; border-radius: 100px;
+      font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+      cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+    }
+    .onboarding-next:hover { opacity: 0.85; transform: translateY(-1px); }
+    body.light .loading-screen { background: var(--bg); }
+    body.light .onboarding-card { background: var(--bg2); }
+
+    /* QUICK ACTIONS */
+    .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+    .qa-card {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 16px;
+      padding: 20px; cursor: pointer; text-align: center;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .qa-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+    .qa-icon { font-size: 28px; margin-bottom: 8px; }
+    .qa-title { font-size: 13px; font-weight: 800; margin-bottom: 2px; }
+    .qa-desc { font-size: 11px; color: var(--muted2); }
+
+    /* ACTIVITY FEED */
+    .activity-feed { display: flex; flex-direction: column; gap: 8px; }
+    .activity-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; background: var(--bg2); border: 1px solid var(--line);
+      border-radius: 12px; font-size: 13px; transition: transform 0.2s;
+    }
+    .activity-item:hover { transform: translateX(4px); }
+    .activity-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .activity-dot.green { background: #27C93F; }
+    .activity-dot.yellow { background: #FFBD2E; }
+    .activity-dot.red { background: #E8215A; }
+    .activity-dot.blue { background: #818CF8; }
+    .activity-text { flex: 1; color: var(--muted); }
+    .activity-text strong { color: var(--text); }
+    .activity-time { font-size: 11px; color: var(--muted2); flex-shrink: 0; }
+
+    /* ARTIST PROGRESS */
+    .progress-widget {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 16px;
+      padding: 24px; margin-bottom: 20px;
+    }
+    .progress-title { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
+    .progress-steps { display: flex; gap: 8px; }
+    .progress-step {
+      flex: 1; text-align: center; padding: 12px 8px;
+      border-radius: 12px; background: var(--bg3); border: 1px solid var(--line);
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .progress-step.done { border-color: rgba(39,201,63,0.3); background: rgba(39,201,63,0.05); }
+    .progress-step.current { border-color: rgba(155,39,175,0.4); background: rgba(155,39,175,0.06); }
+    .progress-step-icon { font-size: 20px; margin-bottom: 4px; }
+    .progress-step-label { font-size: 11px; font-weight: 700; color: var(--muted); }
+
+    /* SUBSCRIPTION WIDGET */
+    .sub-widget {
+      background: var(--bg2); border: 1px solid var(--line); border-radius: 16px;
+      padding: 20px 24px; display: flex; align-items: center; gap: 16px;
+    }
+    .sub-icon { font-size: 32px; }
+    .sub-info { flex: 1; }
+    .sub-plan { font-size: 14px; font-weight: 800; }
+    .sub-desc { font-size: 12px; color: var(--muted); }
+
+    /* TIP CARD */
+    .tip-card {
+      background: linear-gradient(135deg, rgba(232,33,90,0.06) 0%, rgba(155,39,175,0.06) 100%);
+      border: 1px solid rgba(155,39,175,0.15); border-radius: 16px;
+      padding: 20px 24px; display: flex; align-items: flex-start; gap: 14px;
+    }
+    .tip-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+    .tip-title { font-size: 13px; font-weight: 800; margin-bottom: 4px; }
+    .tip-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* OVERVIEW GRID */
+    .overview-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+    @media (max-width: 960px) {
+      .quick-actions { grid-template-columns: repeat(2, 1fr); }
+      .progress-steps { flex-wrap: wrap; }
+      .overview-bottom { grid-template-columns: 1fr; }
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-box {
+      background: var(--bg2); border: 1px solid var(--line2);
+      border-radius: 24px; width: 100%; max-width: 580px;
+      max-height: 85vh; overflow-y: auto;
+      transform: translateY(20px) scale(0.97);
+      transition: transform 0.3s;
+      scrollbar-width: thin; scrollbar-color: var(--line2) transparent;
+    }
+
+    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+
+    .modal-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: var(--bg2); z-index: 1;
+      border-radius: 24px 24px 0 0;
+    }
+
+    .modal-header span { font-size: 13px; font-weight: 700; color: var(--muted); }
+
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--line2);
+      color: var(--muted); font-size: 18px; font-weight: 300;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+      font-family: 'Nunito', sans-serif; line-height: 1;
+    }
+
+    .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+    .modal-body { padding: 24px; }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING SCREEN -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-logo">creator<span class="reg-mark">®</span></div>
+    <div class="loading-bar-track"><div class="loading-bar-fill"></div></div>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div class="onboarding-overlay" id="onboarding">
+    <div class="onboarding-card">
+      <div class="onboarding-step-icon" id="ob-icon">👋</div>
+      <div class="onboarding-step-title" id="ob-title">Добро пожаловать в creator®!</div>
+      <div class="onboarding-step-desc" id="ob-desc">Рады видеть тебя! Давай быстро покажем, как всё устроено — это займёт 30 секунд.</div>
+      <div class="onboarding-dots" id="ob-dots"></div>
+      <div class="onboarding-actions">
+        <button class="onboarding-skip" data-action="skip-onboarding">Пропустить</button>
+        <button class="onboarding-next" id="ob-next" data-action="next-onboarding">Далее →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOBILE HEADER -->
+  <div class="mobile-header">
+    <a href="index.html" style="text-decoration:none; display:flex; align-items:baseline; gap:1px;">
+      <span class="logo-text" style="font-size:20px;">creator</span>
+      <span class="logo-reg">®</span>
+    </a>
+    <button data-action="logout" style="background:transparent;border:none;color:var(--muted);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Выйти</button>
+  </div>
+
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-logo">
+        <span class="logo-text">creator</span>
+        <span class="logo-reg">®</span>
+      </a>
+
+      <span class="nav-section">Главное</span>
+      <button class="nav-item active" data-screen="overview">
+        <span class="nav-icon">🏠</span> Обзор
+      </button>
+      <button class="nav-item" data-screen="releases">
+        <span class="nav-icon">🎵</span> Мои релизы
+      </button>
+      <button class="nav-item" data-screen="upload">
+        <span class="nav-icon">⬆️</span> Загрузить релиз
+      </button>
+      <button class="nav-item" data-screen="analytics">
+        <span class="nav-icon">📊</span> Аналитика
+      </button>
+      <button class="nav-item" data-screen="platforms">
+        <span class="nav-icon">🌐</span> Платформы
+      </button>
+
+      <span class="nav-section">Аккаунт</span>
+      <button class="nav-item" data-screen="notifications">
+        <span class="nav-icon">🔔</span> Уведомления
+        <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+      </button>
+      <button class="nav-item" data-screen="profile">
+        <span class="nav-icon">👤</span> Профиль
+      </button>
+
+      <div class="sidebar-bottom">
+        <button class="theme-btn" data-action="toggle-theme" style="margin-bottom:12px;width:100%;border-radius:10px;gap:8px;font-size:13px;font-weight:700;font-family:'Nunito',sans-serif;">
+          ☀️ &nbsp;Сменить тему
+        </button>
+        <div class="user-block" data-screen="profile">
+          <div class="user-avatar" id="sidebar-avatar">?</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebar-name">—</div>
+            <div class="user-email" id="sidebar-email">—</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- OVERVIEW -->
+      <div class="screen active" id="screen-overview">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Привет, <span class="grad" id="welcome-name">артист</span> 👋</h1>
+            <p class="page-subtitle">Вот что происходит с твоими релизами</p>
+          </div>
+          <button class="btn-grad-sm" data-screen="upload">+ Новый релиз</button>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+          <div class="qa-card" data-screen="upload">
+            <div class="qa-icon">⬆️</div>
+            <div class="qa-title">Новый релиз</div>
+            <div class="qa-desc">Загрузить трек</div>
+          </div>
+          <div class="qa-card" data-screen="analytics">
+            <div class="qa-icon">📊</div>
+            <div class="qa-title">Аналитика</div>
+            <div class="qa-desc">Статистика</div>
+          </div>
+          <div class="qa-card" data-screen="platforms">
+            <div class="qa-icon">🌐</div>
+            <div class="qa-title">Платформы</div>
+            <div class="qa-desc">30+ площадок</div>
+          </div>
+          <div class="qa-card" data-href="contact.html">
+            <div class="qa-icon">💬</div>
+            <div class="qa-title">Поддержка</div>
+            <div class="qa-desc">Написать нам</div>
+          </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Всего релизов</div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-desc">загружено через creator</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Опубликовано</div>
+            <div class="stat-value" id="stat-published">0</div>
+            <div class="stat-desc">доступно на платформах</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">На проверке</div>
+            <div class="stat-value" id="stat-pending">0</div>
+            <div class="stat-desc">обрабатываются сейчас</div>
+          </div>
+        </div>
+
+        <!-- ARTIST PROGRESS -->
+        <div class="progress-widget" id="artist-progress"></div>
+
+        <!-- TIP OF THE DAY -->
+        <div class="tip-card" id="tip-card" style="margin-bottom:20px;">
+          <div class="tip-icon">💡</div>
+          <div>
+            <div class="tip-title">Совет дня</div>
+            <div class="tip-text" id="tip-text">Загружай обложку 3000×3000px для лучшего качества на всех платформах.</div>
+          </div>
+        </div>
+
+        <!-- SUBSCRIPTION WIDGET + LAST RELEASES -->
+        <div class="overview-bottom">
+          <div>
+            <div class="section-header">
+              <span class="section-title">Последние релизы</span>
+              <button class="btn-grad-sm" data-screen="releases" style="background:transparent;border:1px solid var(--line2);color:var(--muted);font-size:12px;">Все релизы</button>
+            </div>
+            <div class="releases-list" id="overview-releases"></div>
+          </div>
+          <div>
+            <!-- PLAN -->
+            <div class="sub-widget" style="margin-bottom:16px;">
+              <div class="sub-icon">⭐</div>
+              <div class="sub-info">
+                <div class="sub-plan">Базовый план</div>
+                <div class="sub-desc">Загрузка за 4–6 дней · Безлимит релизов</div>
+              </div>
+              <button class="btn-grad-sm" style="font-size:11px;padding:6px 14px;flex-shrink:0;">Премиум ↑</button>
+            </div>
+
+            <!-- ACTIVITY FEED -->
+            <div class="section-header">
+              <span class="section-title">Активность</span>
+            </div>
+            <div class="activity-feed" id="activity-feed"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RELEASES -->
+      <div class="screen" id="screen-releases">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Мои <span class="grad">релизы</span></h1>
+            <p class="page-subtitle">Все твои загрузки и их статусы</p>
+          </div>
+          <button class="btn-grad-sm" data-screen="upload">+ Новый релиз</button>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center;">
+          <div style="flex:1;min-width:200px;position:relative;">
+            <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;">🔍</span>
+            <input type="text" placeholder="Поиск по названию или артисту..." data-action="search-releases"
+              style="width:100%;padding:10px 14px 10px 38px;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:500;color:var(--text);outline:none;transition:border-color 0.2s;"
+              data-focus-style="search" >
+          </div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="pending">На проверке</button>
+            <button class="filter-btn" data-filter="published">Опубликованы</button>
+            <button class="filter-btn" data-filter="rejected">Отклонённые</button>
+          </div>
+        </div>
+
+        <div class="releases-list" id="all-releases"></div>
+      </div>
+
+      <!-- UPLOAD -->
+      <div class="screen" id="screen-upload">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Новый <span class="grad">релиз</span></h1>
+            <p class="page-subtitle">Заполни форму — мы сделаем остальное</p>
+          </div>
+        </div>
+
+        <div class="form-card" id="upload-form-card">
+          <div class="form-card-header">
+            <div class="mac-dots">
+              <div class="mac-dot mac-dot-r"></div>
+              <div class="mac-dot mac-dot-y"></div>
+              <div class="mac-dot mac-dot-g"></div>
+            </div>
+            <span id="form-step-label">Шаг 1 из 4 — Тип и исполнитель</span>
+            <span class="autosave-badge" id="autosave-badge" style="opacity:0;">💾 Сохранено</span>
+          </div>
+          <div class="step-progress">
+            <div class="step-bar active" id="bar-1"></div>
+            <div class="step-bar" id="bar-2"></div>
+            <div class="step-bar" id="bar-3"></div>
+            <div class="step-bar" id="bar-4"></div>
+          </div>
+          <div class="form-body">
+
+            <!-- ═══ STEP 1: ТИП И ИСПОЛНИТЕЛЬ ═══ -->
+            <div class="step-panel active" id="step-1">
+              <h3 class="step-heading">Тип релиза и исполнитель</h3>
+              <p class="step-desc">Выбери формат релиза и укажи основного артиста</p>
+
+              <!-- Release type -->
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;">
+                <div class="release-type-card active" data-type="single">
+                  <div class="release-type-icon">🎵</div>
+                  <div class="release-type-name">Сингл</div>
+                  <div class="release-type-desc">1 трек</div>
+                </div>
+                <div class="release-type-card" data-type="ep">
+                  <div class="release-type-icon">💿</div>
+                  <div class="release-type-name">EP</div>
+                  <div class="release-type-desc">2–6 треков</div>
+                </div>
+                <div class="release-type-card" data-type="album">
+                  <div class="release-type-icon">📀</div>
+                  <div class="release-type-name">Альбом</div>
+                  <div class="release-type-desc">7+ треков</div>
+                </div>
+              </div>
+
+              <!-- Primary Artist selector -->
+              <div class="f-group">
+                <div class="f-label-row">
+                  <label>Основной исполнитель *</label>
+                  <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Выбери существующий профиль или создай новый. Имя будет отображаться на всех платформах.</div></div>
+                </div>
+                <div class="artist-selector" id="primary-artist-selector">
+                  <div id="primary-artist-display" style="display:none;"></div>
+                  <div class="artist-search-wrap" id="primary-artist-search-wrap">
+                    <input type="text" id="primary-artist-input" placeholder="Начни вводить имя артиста..." data-artist-search="primary">
+                    <span class="artist-search-icon">🔍</span>
+                    <div class="artist-dropdown" id="primary-artist-dropdown"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- New artist form (hidden by default) -->
+              <div class="artist-form-inline" id="new-artist-form" style="display:none;">
+                <div class="af-header">
+                  <span class="af-title">✨ Новый профиль артиста</span>
+                  <span class="af-close" data-action="cancel-new-artist">✕</span>
+                </div>
+                <div class="f-group" style="margin-bottom:12px;">
+                  <label>Имя артиста / псевдоним *</label>
+                  <input type="text" id="new-artist-name" placeholder="Как будет отображаться на платформах">
+                </div>
+                <div class="f-row">
+                  <div class="f-group" style="margin-bottom:12px;">
+                    <label>Spotify Artist ID</label>
+                    <input type="text" id="new-artist-spotify" placeholder="Необязательно">
+                  </div>
+                  <div class="f-group" style="margin-bottom:12px;">
+                    <label>Apple Music ID</label>
+                    <input type="text" id="new-artist-apple" placeholder="Необязательно">
+                  </div>
+                </div>
+                <div style="display:flex;gap:8px;justify-content:flex-end;">
+                  <button class="btn-back" data-action="cancel-new-artist" style="margin-top:0;font-size:12px;padding:7px 14px;">Отмена</button>
+                  <button class="btn-next" data-action="save-new-artist" style="font-size:12px;padding:7px 14px;">Сохранить артиста ✓</button>
+                </div>
+              </div>
+
+              <!-- Feat artists -->
+              <div class="f-group">
+                <div class="f-label-row">
+                  <label>Feat. артисты</label>
+                  <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Приглашённые артисты — будут указаны через «feat.» на платформах. Добавь каждого отдельно.</div></div>
+                </div>
+                <div class="artist-search-wrap">
+                  <input type="text" id="feat-artist-input" placeholder="Добавь feat. артиста..." data-artist-search="feat">
+                  <span class="artist-search-icon">＋</span>
+                  <div class="artist-dropdown" id="feat-artist-dropdown"></div>
+                </div>
+                <div class="tag-container" id="feat-tags"></div>
+              </div>
+
+              <div class="form-nav">
+                <div></div>
+                <button class="btn-next" data-next-step="1">Далее →</button>
+              </div>
+            </div>
+
+            <!-- ═══ STEP 2: ИНФОРМАЦИЯ О РЕЛИЗЕ ═══ -->
+            <div class="step-panel" id="step-2">
+              <h3 class="step-heading">Информация о релизе</h3>
+              <p class="step-desc">Метаданные которые увидят слушатели на платформах</p>
+
+              <div class="f-group">
+                <div class="f-label-row">
+                  <label>Название релиза *</label>
+                  <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Название без имени артиста. Не добавляй «feat.», «EP», «Single» — платформы сделают это сами.</div></div>
+                </div>
+                <input type="text" id="track-title" placeholder="Например: Лето 2025">
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Версия</label>
+                    <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Укажи если это ремикс, live-версия, deluxe и т.д. Для оригинала — оставь пустым.</div></div>
+                  </div>
+                  <select id="track-version">
+                    <option value="">Оригинал</option>
+                    <option value="Remix">Remix</option>
+                    <option value="Acoustic">Acoustic</option>
+                    <option value="Live">Live</option>
+                    <option value="Instrumental">Instrumental</option>
+                    <option value="Deluxe">Deluxe Edition</option>
+                    <option value="Remaster">Remaster</option>
+                    <option value="Radio Edit">Radio Edit</option>
+                    <option value="Extended">Extended Mix</option>
+                  </select>
+                </div>
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Язык метаданных</label>
+                    <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Язык, на котором заполнены название и метаданные, НЕ язык текста песни.</div></div>
+                  </div>
+                  <select id="track-meta-lang">
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                    <option value="uk">Українська</option>
+                    <option value="kk">Қазақша</option>
+                    <option value="other">Другой</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Жанр *</label>
+                  </div>
+                  <select id="track-genre">
+                    <option value="">Выбери жанр</option>
+                    <option value="pop">Поп</option>
+                    <option value="hip-hop">Хип-хоп / Рэп</option>
+                    <option value="rnb">R&B / Soul</option>
+                    <option value="electronic">Электронная</option>
+                    <option value="rock">Рок</option>
+                    <option value="indie">Инди</option>
+                    <option value="jazz">Джаз</option>
+                    <option value="classical">Классическая</option>
+                    <option value="metal">Метал</option>
+                    <option value="folk">Фолк / Этника</option>
+                    <option value="reggae">Реггетон / Реггей</option>
+                    <option value="country">Кантри</option>
+                    <option value="latin">Латинская</option>
+                    <option value="soundtrack">Саундтрек</option>
+                    <option value="other">Другое</option>
+                  </select>
+                </div>
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Поджанр</label>
+                  </div>
+                  <select id="track-subgenre">
+                    <option value="">— Сначала выбери жанр —</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Дата релиза *</label>
+                    <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Рекомендуем ставить минимум на 2–4 недели вперёд. Платформам нужно время на обработку и модерацию.</div></div>
+                  </div>
+                  <div class="datepicker-wrap" id="dp-wrap">
+                    <button type="button" class="datepicker-trigger placeholder" id="dp-trigger" data-action="toggle-datepicker">Выбери дату</button>
+                    <input type="hidden" id="track-date">
+                    <div class="dp-dropdown" id="dp-dropdown">
+                      <div class="dp-header">
+                        <button type="button" class="dp-nav" data-action="dp-prev">‹</button>
+                        <span class="dp-header-title" id="dp-month-year"></span>
+                        <button type="button" class="dp-nav" data-action="dp-next">›</button>
+                      </div>
+                      <div class="dp-weekdays">
+                        <div class="dp-weekday">Пн</div><div class="dp-weekday">Вт</div><div class="dp-weekday">Ср</div>
+                        <div class="dp-weekday">Чт</div><div class="dp-weekday">Пт</div><div class="dp-weekday">Сб</div>
+                        <div class="dp-weekday">Вс</div>
+                      </div>
+                      <div class="dp-days" id="dp-days"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Ненормативная лексика *</label>
+                    <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Если в треке есть мат — обязательно отметь. Платформы могут отклонить релиз за неправильную маркировку.</div></div>
+                  </div>
+                  <select id="track-explicit">
+                    <option value="no">Нет</option>
+                    <option value="yes">Да (Explicit)</option>
+                    <option value="clean">Clean-версия (есть explicit-оригинал)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Лейбл</label>
+                    <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Если выпускаешь через лейбл — укажи. Если нет — оставь пустым, на платформах будет «Без лейбла».</div></div>
+                  </div>
+                  <input type="text" id="track-label" placeholder="Название лейбла или оставь пустым">
+                </div>
+                <div class="f-group">
+                  <div class="f-label-row">
+                    <label>Язык текста песни</label>
+                  </div>
+                  <select id="track-lang">
+                    <option>Русский</option>
+                    <option>Английский</option>
+                    <option>Инструментал (без слов)</option>
+                    <option>Украинский</option>
+                    <option>Казахский</option>
+                    <option>Другой</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="f-group">
+                <div class="f-label-row">
+                  <label>Копирайт ℗ / ©</label>
+                  <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Год и имя правообладателя. ℗ — для записи, © — для композиции. Заполняется автоматически из профиля если пусто.</div></div>
+                </div>
+                <input type="text" id="track-copyright" placeholder="Например: 2026 Иван Иванов">
+              </div>
+
+              <div class="f-group">
+                <div class="f-label-row">
+                  <label>Ранее опубликованный релиз?</label>
+                  <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Если трек уже был опубликован ранее на платформах — укажи «Да» и оригинальную дату.</div></div>
+                </div>
+                <select id="track-previously-released">
+                  <option value="no">Нет, это новый релиз</option>
+                  <option value="yes">Да, был опубликован ранее</option>
+                </select>
+              </div>
+              <div class="f-row" id="orig-date-row" style="display:none;">
+                <div class="f-group">
+                  <label>Оригинальная дата релиза</label>
+                  <input type="date" id="track-orig-date">
+                </div>
+                <div></div>
+              </div>
+
+              <div class="form-nav">
+                <button class="btn-back" data-prev-step="2">← Назад</button>
+                <button class="btn-next" data-next-step="2">Далее →</button>
+              </div>
+            </div>
+
+            <!-- ═══ STEP 3: ФАЙЛЫ ═══ -->
+            <div class="step-panel" id="step-3">
+              <h3 class="step-heading">Файлы и треки</h3>
+              <p class="step-desc" id="step3-desc">Загрузи аудиофайл и обложку релиза</p>
+
+              <!-- AUDIO UPLOAD -->
+              <div class="f-group">
+                <label id="audio-label">Аудиофайл *</label>
+                <div class="upload-zone" id="audio-zone">
+                  <input type="file" accept=".mp3,.wav,.flac,.aiff,.m4a" id="audio-input">
+                  <div class="u-icon">🎵</div>
+                  <p>Нажми или перетащи файл сюда</p>
+                  <span>WAV, FLAC, AIFF, MP3, M4A · 16-bit 44.1kHz+</span>
+                  <div class="file-name" id="audio-name"></div>
+                </div>
+              </div>
+
+              <!-- TRACK LIST (for EP/Album) -->
+              <div id="track-list-container" style="display:none;margin-bottom:16px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);">Треклист (<span id="track-count-display">0</span>)</label>
+                  <button class="btn-grad-sm" style="font-size:11px;padding:5px 12px;" data-action="add-tracks-multi">+ Добавить треки</button>
+                  <input type="file" accept=".mp3,.wav,.flac,.aiff,.m4a" id="audio-input-multi" multiple style="display:none;">
+                </div>
+                <div id="track-list"></div>
+              </div>
+
+              <!-- COVER UPLOAD -->
+              <div class="f-group">
+                <div class="f-label-row">
+                  <label>Обложка *</label>
+                  <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">JPEG или PNG, минимум 3000×3000 пикселей. Без текста, URL, социальных сетей на обложке — платформы отклонят.</div></div>
+                </div>
+                <div class="upload-zone" id="cover-zone" style="position:relative;overflow:hidden;">
+                  <input type="file" accept=".jpg,.jpeg,.png" id="cover-input">
+                  <img class="cover-preview-inline" id="cover-preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:10px;">
+                  <div id="cover-placeholder">
+                    <div class="u-icon">🖼️</div>
+                    <p>Нажми или перетащи обложку</p>
+                    <span>JPEG / PNG · минимум 3000 × 3000 px · без текста и URL</span>
+                  </div>
+                  <div class="file-name" id="cover-name" style="position:relative;z-index:1;"></div>
+                </div>
+              </div>
+
+              <div style="background:rgba(155,39,175,0.06);border:1px solid rgba(155,39,175,0.15);border-radius:12px;padding:14px 18px;">
+                <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px;">📋 Требования к файлам</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:var(--muted);">
+                  <div>🎵 WAV / FLAC / AIFF (рекоменд.)</div>
+                  <div>🖼️ JPEG или PNG</div>
+                  <div>📊 16-bit / 44.1 kHz и выше</div>
+                  <div>📐 Минимум 3000 × 3000 px</div>
+                  <div>💾 MP3 / M4A принимаем (320 kbps+)</div>
+                  <div>🚫 Без текста и URL на обложке</div>
+                </div>
+              </div>
+
+              <div class="form-nav">
+                <button class="btn-back" data-prev-step="3">← Назад</button>
+                <button class="btn-next" data-next-step="3">Далее →</button>
+              </div>
+            </div>
+
+            <!-- ═══ STEP 4: ОБЗОР И ОТПРАВКА ═══ -->
+            <div class="step-panel" id="step-4">
+              <h3 class="step-heading">Проверь и отправь</h3>
+              <p class="step-desc">Убедись что всё верно — после отправки изменить метаданные можно будет только через поддержку</p>
+
+              <div style="background:var(--bg3);border:1px solid var(--line2);border-radius:14px;padding:18px 20px;margin-bottom:16px;" id="release-summary">
+                <div style="display:flex;align-items:flex-start;gap:20px;">
+                  <img id="summary-cover" style="display:none;width:120px;height:120px;border-radius:12px;object-fit:cover;border:1px solid var(--line2);flex-shrink:0;">
+                  <div style="flex:1;">
+                    <div class="summary-section">
+                      <div class="ss-label">Релиз</div>
+                      <div class="summary-grid" id="summary-release-info"></div>
+                    </div>
+                    <div class="summary-section">
+                      <div class="ss-label">Исполнители</div>
+                      <div id="summary-artists-info" style="font-size:13px;"></div>
+                    </div>
+                    <div class="summary-section">
+                      <div class="ss-label">Детали</div>
+                      <div class="summary-grid" id="summary-details-info"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tracklist summary -->
+              <div id="summary-tracklist-wrap" style="display:none;">
+                <div style="background:var(--bg3);border:1px solid var(--line2);border-radius:14px;padding:18px 20px;margin-bottom:16px;">
+                  <div class="ss-label" style="margin-bottom:8px;">Треклист</div>
+                  <div id="summary-tracklist"></div>
+                </div>
+              </div>
+
+              <div class="f-row">
+                <div class="f-group">
+                  <label>UPC / EAN</label>
+                  <input type="text" id="track-upc" placeholder="Сгенерируем автоматически">
+                </div>
+                <div class="f-group">
+                  <label>ISRC (для сингла)</label>
+                  <input type="text" id="track-isrc" placeholder="Сгенерируем автоматически">
+                </div>
+              </div>
+
+              <div class="f-group">
+                <label>Комментарий для команды</label>
+                <textarea id="track-comment" placeholder="Любые пожелания, уточнения или особые инструкции для нашей команды..."></textarea>
+              </div>
+
+              <div style="background:rgba(39,201,63,0.06);border:1px solid rgba(39,201,63,0.15);border-radius:12px;padding:14px 18px;margin-top:8px;">
+                <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+                  ✅ Нажимая «Отправить», ты подтверждаешь что являешься правообладателем данного контента и соглашаешься с <a href="terms.html" style="color:var(--text);text-decoration:underline;">условиями использования</a>.
+                </div>
+              </div>
+
+              <div class="form-nav">
+                <button class="btn-back" data-prev-step="4">← Назад</button>
+                <button class="btn-next" data-action="submit-release">Отправить релиз 🚀</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="form-card" id="upload-success" style="display:none;">
+          <div class="success-screen">
+            <div class="success-icon">✅</div>
+            <h3>Релиз отправлен!</h3>
+            <p>Мы получили твои материалы и скоро начнём проверку. Обычно это занимает 1–2 рабочих дня.</p>
+            <button class="btn-next" data-action="new-release">Загрузить ещё один</button>
+            &nbsp;
+            <button class="btn-back" data-screen="releases" style="margin-top:0;">Мои релизы</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="screen" id="screen-analytics">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">📊 <span class="grad">Аналитика</span></h1>
+            <p class="page-subtitle">Статистика твоих релизов</p>
+          </div>
+        </div>
+
+        <div class="analytics-grid" id="analytics-cards"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div class="chart-card">
+            <h3>📈 Релизы по месяцам</h3>
+            <div class="bar-chart" id="chart-monthly"></div>
+          </div>
+          <div class="chart-card">
+            <h3>🎸 По жанрам</h3>
+            <div class="bar-chart" id="chart-genres"></div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3>📋 Распределение статусов</h3>
+          <div style="display:flex;gap:16px;flex-wrap:wrap;" id="status-bars"></div>
+        </div>
+      </div>
+
+      <!-- PLATFORMS -->
+      <div class="screen" id="screen-platforms">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">🌐 <span class="grad">Платформы</span></h1>
+            <p class="page-subtitle">Твоя музыка доступна на всех крупных площадках</p>
+          </div>
+        </div>
+
+        <div class="platforms-grid" id="platforms-list"></div>
+
+        <div style="margin-top:32px;">
+          <div class="section-header">
+            <span class="section-title">Предпросмотр на платформе</span>
+          </div>
+          <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start;">
+
+            <!-- PHONE PREVIEW -->
+            <div class="phone-preview" id="preview-phone">
+              <div class="phone-notch"></div>
+              <div class="phone-cover" id="preview-cover">🎵</div>
+              <div class="phone-title" id="preview-title">Твой трек</div>
+              <div class="phone-artist" id="preview-artist">Артист</div>
+              <div class="phone-progress"><div class="phone-progress-fill" id="preview-progress" style="background:#1DB954;"></div></div>
+              <div class="phone-time"><span>1:14</span><span>3:28</span></div>
+              <div class="phone-controls">
+                <span class="phone-btn">⏮</span>
+                <span class="phone-btn play">▶</span>
+                <span class="phone-btn">⏭</span>
+              </div>
+            </div>
+
+            <!-- PREVIEW SETTINGS -->
+            <div style="flex:1;min-width:280px;">
+              <div class="form-card" style="padding:24px;">
+                <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;">Настрой предпросмотр</h3>
+                <div class="f-group">
+                  <label>Выбери релиз</label>
+                  <select id="preview-select">
+                    <option value="">— Выбери релиз —</option>
+                  </select>
+                </div>
+                <div class="f-group">
+                  <label>Платформа</label>
+                  <select id="preview-platform">
+                    <option value="spotify">Spotify</option>
+                    <option value="apple">Apple Music</option>
+                    <option value="yandex">Яндекс Музыка</option>
+                    <option value="vk">VK Музыка</option>
+                    <option value="youtube">YouTube Music</option>
+                  </select>
+                </div>
+                <div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:12px;">
+                  <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:10px;">💡 Совет</div>
+                  <div style="font-size:13px;color:var(--muted);line-height:1.6;">Так будет выглядеть твой релиз на платформе. Убедись, что обложка и название выглядят хорошо!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div class="screen" id="screen-notifications">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">🔔 <span class="grad">Уведомления</span></h1>
+            <p class="page-subtitle">Статусы релизов и важные обновления</p>
+          </div>
+          <button class="btn-grad-sm" data-action="mark-all-read" style="background:transparent;border:1px solid var(--line2);color:var(--muted);font-size:12px;">
+            Прочитать все
+          </button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;" id="notif-list"></div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="screen" id="screen-profile">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Мой <span class="grad">профиль</span></h1>
+            <p class="page-subtitle">Настройки аккаунта</p>
+          </div>
+        </div>
+        <div class="profile-grid">
+          <div class="profile-card">
+            <div class="profile-avatar-big" id="profile-avatar-big">?</div>
+            <div class="profile-name-big" id="profile-name-big">—</div>
+            <div class="profile-email-big" id="profile-email-big">—</div>
+            <div class="profile-stat">
+              <span>Релизов загружено</span>
+              <span id="profile-stat-total">0</span>
+            </div>
+            <div class="profile-stat">
+              <span>Аккаунт создан</span>
+              <span id="profile-stat-date">—</span>
+            </div>
+            <div style="margin-top: 20px;">
+              <button class="btn-danger" style="width:100%;" data-action="logout">Выйти из аккаунта</button>
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3>Настройки профиля</h3>
+            <div class="f-group">
+              <label>Имя артиста</label>
+              <input type="text" id="settings-name" placeholder="Твой псевдоним">
+            </div>
+            <div class="f-group">
+              <label>Email</label>
+              <input type="email" id="settings-email" placeholder="your@email.com">
+            </div>
+            <div class="f-group">
+              <label>Новый пароль (оставь пустым чтобы не менять)</label>
+              <input type="password" id="settings-password" placeholder="Минимум 6 символов">
+            </div>
+            <button class="btn-save" data-action="save-profile">Сохранить изменения</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- TRACK EDIT MODAL -->
+  <div class="modal-overlay" id="track-edit-modal" data-modal-close="track-edit-modal">
+    <div class="modal-box" style="max-width:560px;">
+      <div class="modal-header">
+        <span id="track-modal-title">Редактирование трека</span>
+        <button class="modal-close" data-action="close-track-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="f-group">
+          <label>Название трека *</label>
+          <input type="text" id="te-title" placeholder="Название трека">
+        </div>
+        <div class="f-row">
+          <div class="f-group">
+            <label>Версия</label>
+            <select id="te-version">
+              <option value="">Оригинал</option>
+              <option value="Remix">Remix</option>
+              <option value="Acoustic">Acoustic</option>
+              <option value="Live">Live</option>
+              <option value="Instrumental">Instrumental</option>
+              <option value="Radio Edit">Radio Edit</option>
+              <option value="Extended">Extended Mix</option>
+            </select>
+          </div>
+          <div class="f-group">
+            <label>Ненормативная лексика</label>
+            <select id="te-explicit">
+              <option value="no">Нет</option>
+              <option value="yes">Да (Explicit)</option>
+              <option value="clean">Clean-версия</option>
+            </select>
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="f-group">
+            <label>Исполнитель (если отличается)</label>
+            <input type="text" id="te-artist" placeholder="Только если отличается от основного">
+          </div>
+          <div class="f-group">
+            <label>Feat.</label>
+            <input type="text" id="te-feat" placeholder="Если есть">
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--line);margin:16px 0 14px;"></div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:12px;">👥 Авторы и участники</div>
+
+        <div class="f-row">
+          <div class="f-group">
+            <label>Автор текста (лирик) *</label>
+            <input type="text" id="te-writer" placeholder="Полное имя автора слов">
+          </div>
+          <div class="f-group">
+            <label>Композитор *</label>
+            <input type="text" id="te-composer" placeholder="Автор музыки">
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="f-group">
+            <label>Продюсер</label>
+            <input type="text" id="te-producer" placeholder="Имя продюсера">
+          </div>
+          <div class="f-group">
+            <label>Аранжировщик</label>
+            <input type="text" id="te-arranger" placeholder="Если есть">
+          </div>
+        </div>
+        <div class="f-group">
+          <label>ISRC (если есть)</label>
+          <input type="text" id="te-isrc" placeholder="Сгенерируем автоматически если пусто">
+        </div>
+        <div class="f-group">
+          <label>Текст песни</label>
+          <textarea id="te-lyrics" placeholder="Вставь текст песни — это помогает попасть в Lyrics на платформах..." style="min-height:120px;"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
+          <button class="btn-back" data-action="close-track-modal">Отмена</button>
+          <button class="btn-next" data-action="save-track-meta">Сохранить ✓</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- PROGRESS OVERLAY -->
+  <div class="progress-overlay" id="progress-overlay">
+    <div class="progress-box">
+      <h3>Загружаем релиз...</h3>
+      <p>Пожалуйста, подожди — это займёт несколько секунд</p>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-percent" id="progress-percent">0%</div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="release-modal" data-modal-close="release-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span>Информация о релизе</span>
+        <button class="modal-close" data-action="close-release-modal">✕</button>
+      </div>
+      <div class="modal-body" id="modal-content"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

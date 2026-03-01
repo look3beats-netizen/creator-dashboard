@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>creator® — Вход</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'><stop offset='0%25' stop-color='%23E8215A'/><stop offset='100%25' stop-color='%239B27AF'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='900' font-family='sans-serif' fill='url(%23g)'>c</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A0C;
+      --bg2: #111116;
+      --text: #FFFFFF;
+      --muted: rgba(255,255,255,0.45);
+      --muted2: rgba(255,255,255,0.25);
+      --line: rgba(255,255,255,0.08);
+      --line2: rgba(255,255,255,0.12);
+      --grad: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+      --grad-text: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+      --red: #E8215A;
+      --purple: #9B27AF;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Nunito', sans-serif;
+    }
+
+    .grad {
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* GLOW */
+    .glow {
+      position: fixed;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(155,39,175,0.18) 0%, rgba(232,33,90,0.07) 50%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* LAYOUT */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* LOGO */
+    .logo {
+      text-decoration: none;
+      display: flex;
+      align-items: baseline;
+      gap: 1px;
+      margin-bottom: 40px;
+    }
+
+    .logo-text {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 900;
+      font-size: 28px;
+      letter-spacing: -1px;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .logo .reg {
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      vertical-align: super;
+    }
+
+    /* CARD */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--line2);
+      border-radius: 24px;
+      padding: 40px;
+      width: 100%;
+      max-width: 440px;
+      animation: fadeUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 32px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .tab.active {
+      background: var(--grad);
+      color: #fff;
+    }
+
+    /* FORM */
+    .form-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .form-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .f-group { margin-bottom: 16px; }
+
+    .f-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+
+    .f-group input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line2);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .f-group input:focus {
+      border-color: rgba(155,39,175,0.6);
+      background: rgba(255,255,255,0.07);
+    }
+
+    .f-group input::placeholder { color: var(--muted2); }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      margin-top: -8px;
+      margin-bottom: 16px;
+      transition: color 0.2s;
+    }
+
+    .forgot:hover { color: var(--text); }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--grad);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-top: 8px;
+    }
+
+    .btn-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+      color: var(--muted2);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* HIDDEN PANELS */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* AGREEMENT */
+    .agreement {
+      font-size: 12px;
+      color: var(--muted2);
+      text-align: center;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+
+    .agreement a {
+      color: var(--muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* BACK LINK */
+    .back-link {
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--muted2);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover { color: var(--muted); }
+
+    /* ERROR */
+    .error-msg {
+      background: rgba(232,33,90,0.1);
+      border: 1px solid rgba(232,33,90,0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #E8215A;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error-msg.show { display: block; }
+
+    /* SUCCESS */
+    .success-msg {
+      background: rgba(39,201,63,0.1);
+      border: 1px solid rgba(39,201,63,0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #27C93F;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .success-msg.show { display: block; }
+
+    @media (max-width: 480px) {
+      .card { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow"></div>
+<button class="theme-btn" onclick="toggleTheme()" style="position:fixed;top:16px;right:20px;z-index:200;">☀️</button>
+  <div class="page">
+    <a href="index.html" class="logo">
+      <span class="logo-text">creator</span>
+      <span class="reg">®</span>
+    </a>
+
+    <div class="card">
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('login')">Войти</button>
+        <button class="tab" onclick="switchTab('register')">Регистрация</button>
+      </div>
+
+      <!-- LOGIN -->
+      <div class="panel active" id="panel-login">
+        <h2 class="form-title">Добро пожаловать</h2>
+        <p class="form-subtitle">Войди в свой аккаунт чтобы управлять релизами</p>
+
+        <div class="error-msg" id="login-error">Неверный email или пароль</div>
+
+        <div class="f-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="your@email.com">
+        </div>
+        <div class="f-group">
+          <label>Пароль</label>
+          <input type="password" id="login-password" placeholder="••••••••">
+        </div>
+        <a href="#" class="forgot">Забыл пароль?</a>
+        <button class="btn-submit" onclick="handleLogin()">Войти →</button>
+
+        <p class="agreement">
+          Нет аккаунта? <a href="#" onclick="switchTab('register')">Зарегистрироваться</a>
+        </p>
+      </div>
+
+      <!-- REGISTER -->
+      <div class="panel" id="panel-register">
+        <h2 class="form-title">Создать аккаунт</h2>
+        <p class="form-subtitle">Зарегистрируйся и начни загружать музыку</p>
+
+        <div class="error-msg" id="reg-error">Заполни все поля</div>
+        <div class="success-msg" id="reg-success">Аккаунт создан! Теперь войди.</div>
+
+        <div class="f-group">
+          <label>Имя артиста</label>
+          <input type="text" id="reg-name" placeholder="Твой псевдоним">
+        </div>
+        <div class="f-group">
+          <label>Email</label>
+          <input type="email" id="reg-email" placeholder="your@email.com">
+        </div>
+        <div class="f-group">
+          <label>Пароль</label>
+          <input type="password" id="reg-password" placeholder="Минимум 6 символов">
+        </div>
+        <div class="f-group">
+          <label>Повтори пароль</label>
+          <input type="password" id="reg-password2" placeholder="••••••••">
+        </div>
+        <button class="btn-submit" onclick="handleRegister()">Создать аккаунт →</button>
+
+        <p class="agreement">
+          Регистрируясь, ты соглашаешься с <a href="terms.html">условиями использования</a>
+        </p>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-link">← Вернуться на главную</a>
+  </div>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+
+      if (tab === 'login') {
+        document.querySelectorAll('.tab')[0].classList.add('active');
+        document.getElementById('panel-login').classList.add('active');
+      } else {
+        document.querySelectorAll('.tab')[1].classList.add('active');
+        document.getElementById('panel-register').classList.add('active');
+      }
+    }
+
+    function handleLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errorEl = document.getElementById('login-error');
+
+      if (!email || !password) {
+        errorEl.textContent = 'Заполни все поля';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      // Проверяем сохранённых пользователей
+      const users = JSON.parse(localStorage.getItem('cr_users') || '[]');
+      const user = users.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        errorEl.textContent = 'Неверный email или пароль';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      errorEl.classList.remove('show');
+      localStorage.setItem('cr_current_user', JSON.stringify(user));
+      window.location.href = 'dashboard.html';
+    }
+
+    function handleRegister() {
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const password2 = document.getElementById('reg-password2').value;
+      const errorEl = document.getElementById('reg-error');
+      const successEl = document.getElementById('reg-success');
+
+      errorEl.classList.remove('show');
+      successEl.classList.remove('show');
+
+      if (!name || !email || !password || !password2) {
+        errorEl.textContent = 'Заполни все поля';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (password.length < 6) {
+        errorEl.textContent = 'Пароль минимум 6 символов';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      if (password !== password2) {
+        errorEl.textContent = 'Пароли не совпадают';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem('cr_users') || '[]');
+
+      if (users.find(u => u.email === email)) {
+        errorEl.textContent = 'Этот email уже зарегистрирован';
+        errorEl.classList.add('show');
+        return;
+      }
+
+      const newUser = { name, email, password, createdAt: new Date().toISOString() };
+      users.push(newUser);
+      localStorage.setItem('cr_users', JSON.stringify(users));
+
+      successEl.classList.add('show');
+      setTimeout(() => switchTab('login'), 1500);
+    }
+
+    // Enter для отправки
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const activePanel = document.querySelector('.panel.active').id;
+        if (activePanel === 'panel-login') handleLogin();
+        else handleRegister();
+      }
+    });
+  </script>
+  <!-- THEME TOGGLE -->
+<style>
+  .theme-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* LIGHT THEME */
+  body.light {
+    --bg: #F5F4F1;
+    --bg2: #FFFFFF;
+    --bg3: #EEECEA;
+    --text: #0A0A0C;
+    --muted: rgba(0,0,0,0.45);
+    --muted2: rgba(0,0,0,0.25);
+    --line: rgba(0,0,0,0.08);
+    --line2: rgba(0,0,0,0.12);
+  }
+
+  body.light .theme-btn {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.12);
+    color: rgba(0,0,0,0.5);
+  }
+  body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
+
+  body.light nav {
+    background: rgba(245,244,241,0.88);
+  }
+
+  body.light .f-group input,
+  body.light .f-group select,
+  body.light .f-group textarea {
+    background: rgba(0,0,0,0.04);
+    color: var(--text);
+  }
+
+  body.light .f-group select option { background: #ffffff; color: #0A0A0C; }
+
+  body.light .tabs {
+    background: rgba(0,0,0,0.05);
+  }
+</style>
+
+<script>
+  (function() {
+    const saved = localStorage.getItem('cr_theme') || 'dark';
+    if (saved === 'light') document.body.classList.add('light');
+  })();
+
+  function toggleTheme() {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('cr_theme', isLight ? 'light' : 'dark');
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.textContent = isLight ? '🌙' : '☀️';
+    });
+  }
+</script>
+</body>
+</html>

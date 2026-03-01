@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>creator® — 404</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'><stop offset='0%25' stop-color='%23E8215A'/><stop offset='100%25' stop-color='%239B27AF'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='900' font-family='sans-serif' fill='url(%23g)'>c</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0A0A0C; --bg2: #111116;
+      --text: #FFFFFF; --muted: rgba(255,255,255,0.45); --muted2: rgba(255,255,255,0.25);
+      --line: rgba(255,255,255,0.08); --line2: rgba(255,255,255,0.12);
+      --grad: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+      --grad-text: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 24px; overflow: hidden; }
+
+    .glow {
+      position: fixed; top: -150px; left: 50%; transform: translateX(-50%);
+      width: 800px; height: 600px;
+      background: radial-gradient(ellipse, rgba(155,39,175,0.15) 0%, rgba(232,33,90,0.06) 50%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .content { position: relative; z-index: 1; }
+
+    .logo-link {
+      text-decoration: none; display: inline-flex; align-items: baseline; gap: 1px; margin-bottom: 60px;
+    }
+    .logo-text {
+      font-weight: 900; font-size: 24px; letter-spacing: -1px;
+      background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .logo-reg {
+      font-size: 9px; font-weight: 700;
+      background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      vertical-align: super;
+    }
+
+    .error-code {
+      font-size: clamp(100px, 20vw, 200px);
+      font-weight: 900;
+      letter-spacing: -8px;
+      line-height: 1;
+      background: var(--grad-text);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 16px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .error-title {
+      font-size: 24px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.5px;
+    }
+
+    .error-desc {
+      font-size: 16px; color: var(--muted); line-height: 1.7; max-width: 400px; margin: 0 auto 40px;
+    }
+
+    .btn-grad {
+      background: var(--grad); color: #fff; padding: 14px 32px; border-radius: 100px;
+      font-size: 15px; font-weight: 800; border: none; cursor: pointer;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Nunito', sans-serif;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-grad:hover { opacity: 0.85; transform: translateY(-2px); }
+
+    .back-link {
+      display: inline-block; margin-top: 20px;
+      font-size: 14px; color: var(--muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .theme-btn {
+      position: fixed; top: 16px; right: 20px; z-index: 200;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.6); font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.2s;
+    }
+    .theme-btn:hover { background: rgba(255,255,255,0.1); }
+
+    /* Light theme */
+    body.light {
+      --bg: #F5F4F1; --bg2: #FFFFFF;
+      --text: #0A0A0C; --muted: rgba(0,0,0,0.45); --muted2: rgba(0,0,0,0.25);
+      --line: rgba(0,0,0,0.08); --line2: rgba(0,0,0,0.12);
+    }
+    body.light .theme-btn { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); color: rgba(0,0,0,0.5); }
+    body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <button class="theme-btn" onclick="toggleTheme()" id="theme-toggle">☀️</button>
+  <div class="content">
+    <a href="index.html" class="logo-link">
+      <span class="logo-text">creator</span>
+      <span class="logo-reg">®</span>
+    </a>
+
+    <div class="error-code">404</div>
+    <h1 class="error-title">Страница не найдена</h1>
+    <p class="error-desc">Похоже, этот трек ещё не записан. Страница, которую ты ищешь, не существует или была удалена.</p>
+
+    <a href="index.html" class="btn-grad">← На главную</a>
+    <br>
+    <a href="javascript:history.back()" class="back-link">Или вернись назад</a>
+  </div>
+
+  <script>
+    (function() {
+      const saved = localStorage.getItem('cr_theme') || 'dark';
+      if (saved === 'light') document.body.classList.add('light');
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';
+    })();
+
+    function toggleTheme() {
+      const isLight = document.body.classList.toggle('light');
+      localStorage.setItem('cr_theme', isLight ? 'light' : 'dark');
+      const btn = document.getElementById('theme-toggle');
+      if (btn) btn.textContent = isLight ? '🌙' : '☀️';
+    }
+  </script>
+</body>
+</html>

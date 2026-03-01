@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>creator® — Контакт</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='0%25'><stop offset='0%25' stop-color='%23E8215A'/><stop offset='100%25' stop-color='%239B27AF'/></linearGradient></defs><text y='.9em' font-size='90' font-weight='900' font-family='sans-serif' fill='url(%23g)'>c</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0A0A0C; --bg2: #111116; --bg3: #16161C;
+      --text: #FFFFFF; --muted: rgba(255,255,255,0.45); --muted2: rgba(255,255,255,0.2);
+      --line: rgba(255,255,255,0.08); --line2: rgba(255,255,255,0.12);
+      --grad: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+      --grad-text: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; animation: pageEnter 0.4s ease forwards; }
+    @keyframes pageEnter { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .grad { background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,12,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+      padding: 0 48px; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { text-decoration: none; display: flex; align-items: baseline; gap: 1px; }
+    .logo-text { font-weight: 900; font-size: 22px; letter-spacing: -1px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .logo-reg { font-size: 9px; font-weight: 700; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; vertical-align: super; }
+    .nav-links { display: flex; gap: 20px; list-style: none; align-items: center; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn-grad { background: var(--grad); color: #fff !important; padding: 10px 24px; border-radius: 100px; font-size: 13px !important; font-weight: 700 !important; text-decoration: none; transition: opacity 0.2s; }
+    .btn-grad:hover { opacity: 0.85; }
+
+    .hero {
+      min-height: 50vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 130px 24px 60px;
+      position: relative;
+    }
+    .hero::after {
+      content: ''; position: absolute; top: 10%; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(155,39,175,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero > * { position: relative; z-index: 1; }
+
+    .page-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--line2);
+      border-radius: 100px; padding: 6px 16px;
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 24px;
+    }
+
+    .hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 900; letter-spacing: -2px; line-height: 1.05; margin-bottom: 16px; }
+    .hero p { font-size: 17px; color: var(--muted); max-width: 460px; line-height: 1.7; }
+
+    .content { max-width: 1100px; margin: 0 auto; padding: 0 48px 100px; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 32px; align-items: start; }
+
+    /* CONTACT CARDS */
+    .contact-cards { display: flex; flex-direction: column; gap: 14px; }
+
+    .contact-card {
+      background: var(--bg2); border: 1px solid var(--line);
+      border-radius: 16px; padding: 22px 24px;
+      display: flex; align-items: center; gap: 16px;
+      text-decoration: none; transition: border-color 0.2s, transform 0.2s;
+    }
+    .contact-card:hover { border-color: var(--line2); transform: translateX(4px); }
+
+    .contact-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--line2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+
+    .contact-card-info h3 { font-size: 15px; font-weight: 800; margin-bottom: 3px; }
+    .contact-card-info p { font-size: 13px; color: var(--muted); }
+    .contact-card-info span { font-size: 13px; color: var(--muted2); }
+
+    .contact-arrow { margin-left: auto; color: var(--muted2); font-size: 18px; flex-shrink: 0; }
+
+    .section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--muted); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::before { content: ''; display: inline-block; width: 20px; height: 2px; background: var(--grad); border-radius: 2px; }
+
+    /* FORM */
+    .form-card {
+      background: var(--bg2); border: 1px solid var(--line2);
+      border-radius: 20px; overflow: hidden;
+    }
+    .form-card-header {
+      padding: 18px 24px; border-bottom: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mac-dots { display: flex; gap: 7px; }
+    .mac-dot { width: 11px; height: 11px; border-radius: 50%; }
+    .mac-dot-r { background: #FF5F56; } .mac-dot-y { background: #FFBD2E; } .mac-dot-g { background: #27C93F; }
+    .form-card-header span { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+    .form-body { padding: 24px; }
+    .f-group { margin-bottom: 16px; }
+    .f-group label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 7px; }
+    .f-group input, .f-group select, .f-group textarea {
+      width: 100%; padding: 11px 14px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--line2);
+      border-radius: 10px; font-family: 'Nunito', sans-serif;
+      font-size: 14px; font-weight: 500; color: var(--text);
+      outline: none; transition: border-color 0.2s;
+    }
+    .f-group input:focus, .f-group select:focus, .f-group textarea:focus { border-color: rgba(155,39,175,0.6); }
+    .f-group select option { background: #1a1a2e; }
+    .f-group textarea { resize: vertical; min-height: 120px; }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .btn-submit {
+      width: 100%; padding: 14px; background: var(--grad); border: none;
+      border-radius: 12px; color: #fff; font-family: 'Nunito', sans-serif;
+      font-size: 15px; font-weight: 800; cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s; margin-top: 8px;
+    }
+    .btn-submit:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .success-block {
+      text-align: center; padding: 40px 24px; display: none;
+    }
+    .success-icon { font-size: 48px; margin-bottom: 14px; }
+    .success-block h3 { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+    .success-block p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* FAQ MINI */
+    .faq-mini { margin-top: 32px; }
+    .faq-mini-title { font-size: 16px; font-weight: 800; margin-bottom: 14px; }
+    .faq-mini-item { border-bottom: 1px solid var(--line); }
+    .faq-mini-q { padding: 14px 0; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .faq-mini-q::after { content: '+'; font-size: 18px; font-weight: 300; color: var(--muted); transition: transform 0.3s; flex-shrink: 0; }
+    .faq-mini-item.open .faq-mini-q::after { transform: rotate(45deg); }
+    .faq-mini-a { max-height: 0; overflow: hidden; transition: max-height 0.3s; }
+    .faq-mini-a-inner { padding-bottom: 14px; font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+    footer { border-top: 1px solid var(--line); padding: 36px 48px; display: flex; align-items: center; justify-content: space-between; }
+    .footer-links { display: flex; gap: 24px; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--muted2); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--muted); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .content { padding: 0 20px 80px; }
+      .grid { grid-template-columns: 1fr; }
+      .f-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text">creator</span>
+      <span class="logo-reg">®</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Главная</a></li>
+      <li><a href="terms.html">Условия</a></li>
+      <li><button class="theme-btn" onclick="toggleTheme()" id="theme-toggle">☀️</button></li>
+      <li><a href="login.html" class="btn-grad">Войти</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="page-badge">📬 Связь с нами</div>
+    <h1>Напиши нам — <span class="grad">ответим</span></h1>
+    <p>Есть вопросы по загрузке или релизу? Мы на связи и всегда готовы помочь.</p>
+  </div>
+
+  <div class="content">
+    <div class="grid">
+      <div>
+        <p class="section-label">Каналы связи</p>
+        <div class="contact-cards">
+          <a href="mailto:help@creator.ru" class="contact-card">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-card-info">
+              <h3>Email</h3>
+              <p>help@creator.ru</p>
+              <span>Ответ в течение 24 часов</span>
+            </div>
+            <div class="contact-arrow">→</div>
+          </a>
+          <a href="https://t.me/creatormusic" class="contact-card" target="_blank">
+            <div class="contact-icon">✈️</div>
+            <div class="contact-card-info">
+              <h3>Telegram</h3>
+              <p>@creatormusic</p>
+              <span>Самый быстрый способ</span>
+            </div>
+            <div class="contact-arrow">→</div>
+          </a>
+          <a href="https://instagram.com/creator" class="contact-card" target="_blank">
+            <div class="contact-icon">📸</div>
+            <div class="contact-card-info">
+              <h3>Instagram</h3>
+              <p>@creator</p>
+              <span>Новости и обновления</span>
+            </div>
+            <div class="contact-arrow">→</div>
+          </a>
+        </div>
+
+        <div class="faq-mini" style="margin-top:32px;">
+          <p class="faq-mini-title">Быстрые ответы</p>
+          <div class="faq-mini-item">
+            <div class="faq-mini-q">Сколько ждать ответа?</div>
+            <div class="faq-mini-a"><div class="faq-mini-a-inner">По email — до 24 часов. В Telegram обычно отвечаем в течение нескольких часов в рабочее время.</div></div>
+          </div>
+          <div class="faq-mini-item">
+            <div class="faq-mini-q">По каким вопросам писать?</div>
+            <div class="faq-mini-a"><div class="faq-mini-a-inner">Загрузка релизов, технические проблемы, статус релиза, вопросы по платформам — по любым вопросам, связанным с сервисом.</div></div>
+          </div>
+          <div class="faq-mini-item">
+            <div class="faq-mini-q">Есть ли телефон поддержки?</div>
+            <div class="faq-mini-a"><div class="faq-mini-a-inner">Пока нет. Мы работаем через email и Telegram — это позволяет отвечать быстрее и качественнее.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="section-label">Форма обратной связи</p>
+        <div class="form-card">
+          <div class="form-card-header">
+            <div class="mac-dots">
+              <div class="mac-dot mac-dot-r"></div>
+              <div class="mac-dot mac-dot-y"></div>
+              <div class="mac-dot mac-dot-g"></div>
+            </div>
+            <span>Новое сообщение</span>
+          </div>
+          <div class="form-body" id="contact-form">
+            <div class="f-row">
+              <div class="f-group">
+                <label>Имя</label>
+                <input type="text" id="c-name" placeholder="Твоё имя">
+              </div>
+              <div class="f-group">
+                <label>Email</label>
+                <input type="email" id="c-email" placeholder="your@email.com">
+              </div>
+            </div>
+            <div class="f-group">
+              <label>Тема</label>
+              <select id="c-topic">
+                <option value="">Выбери тему</option>
+                <option>Загрузка релиза</option>
+                <option>Статус релиза</option>
+                <option>Технические проблемы</option>
+                <option>Вопрос по платформам</option>
+                <option>Другое</option>
+              </select>
+            </div>
+            <div class="f-group">
+              <label>Сообщение</label>
+              <textarea id="c-message" placeholder="Опиши свой вопрос или проблему..."></textarea>
+            </div>
+            <button class="btn-submit" onclick="sendContact()">Отправить сообщение →</button>
+          </div>
+          <div class="success-block" id="contact-success">
+            <div class="success-icon">✅</div>
+            <h3>Сообщение отправлено!</h3>
+            <p>Мы получили твоё сообщение и ответим в течение 24 часов на указанный email.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="index.html" class="nav-logo">
+      <span class="logo-text" style="font-size:18px;">creator</span>
+      <span class="logo-reg">®</span>
+    </a>
+    <p style="font-size:13px;color:var(--muted2);">© 2025 creator. Все права защищены.</p>
+    <ul class="footer-links">
+      <li><a href="terms.html">Условия</a></li>
+      <li><a href="contact.html">Контакт</a></li>
+      <li><a href="login.html">Войти</a></li>
+    </ul>
+  </footer>
+
+  <div id="page-loader" style="position:fixed;inset:0;z-index:9999;background:#0A0A0C;display:flex;align-items:center;justify-content:center;pointer-events:none;opacity:0;transition:opacity 0.3s ease;">
+    <div style="text-align:center;">
+      <div style="width:48px;height:48px;border-radius:50%;border:3px solid rgba(255,255,255,0.08);border-top-color:#E8215A;border-right-color:#9B27AF;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+      <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">creator®</div>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    function sendContact() {
+      const name = document.getElementById('c-name').value.trim();
+      const email = document.getElementById('c-email').value.trim();
+      const topic = document.getElementById('c-topic').value;
+      const message = document.getElementById('c-message').value.trim();
+      if (!name || !email || !topic || !message) {
+        alert('Заполни все поля'); return;
+      }
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('contact-success').style.display = 'block';
+    }
+
+    document.querySelectorAll('.faq-mini-q').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const a = item.querySelector('.faq-mini-a');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-mini-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-mini-a').style.maxHeight = null;
+        });
+        if (!isOpen) { item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
+      });
+    });
+
+    window._navigate = function(href){
+      const loader = document.getElementById('page-loader');
+      loader.style.opacity = '1'; loader.style.pointerEvents = 'all';
+      setTimeout(() => { window.location.href = href; }, 350);
+    };
+    document.addEventListener('click', function(e){
+      const link = e.target.closest('a[href]');
+      if (!link) return;
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
+      e.preventDefault();
+      window._navigate(href);
+    });
+  </script>
+  <!-- THEME TOGGLE -->
+<style>
+  .theme-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-btn:hover { background: rgba(255,255,255,0.1); }
+
+  /* LIGHT THEME */
+  body.light {
+    --bg: #F5F4F1;
+    --bg2: #FFFFFF;
+    --bg3: #EEECEA;
+    --text: #0A0A0C;
+    --muted: rgba(0,0,0,0.45);
+    --muted2: rgba(0,0,0,0.25);
+    --line: rgba(0,0,0,0.08);
+    --line2: rgba(0,0,0,0.12);
+  }
+
+  body.light .theme-btn {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.12);
+    color: rgba(0,0,0,0.5);
+  }
+  body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
+
+  body.light nav {
+    background: rgba(245,244,241,0.88);
+  }
+
+  body.light .f-group input,
+  body.light .f-group select,
+  body.light .f-group textarea {
+    background: rgba(0,0,0,0.04);
+    color: var(--text);
+  }
+
+  body.light .f-group select option { background: #ffffff; color: #0A0A0C; }
+</style>
+
+<script>
+  (function() {
+    const saved = localStorage.getItem('cr_theme') || 'dark';
+    if (saved === 'light') document.body.classList.add('light');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = saved === 'light' ? '🌙' : '☀️';
+  })();
+
+  function toggleTheme() {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('cr_theme', isLight ? 'light' : 'dark');
+    const btn = document.getElementById('theme-toggle');
+    if (btn) btn.textContent = isLight ? '🌙' : '☀️';
+  }
+</script>
+</body>
+</html>
