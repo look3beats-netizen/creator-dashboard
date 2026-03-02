@@ -11,7 +11,7 @@
     body { background: #0A0A0C; color: #fff; font-family: 'Nunito', sans-serif; padding: 40px; }
     h1 { font-size: 28px; font-weight: 900; text-align: center; margin-bottom: 12px; }
     .grad { background: linear-gradient(90deg, #E8215A, #9B27AF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .subtitle { text-align: center; color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 48px; }
+    .subtitle { text-align: center; color: rgba(255,255,255,0.75); font-size: 14px; margin-bottom: 48px; }
     .templates { display: flex; flex-direction: column; gap: 40px; max-width: 640px; margin: 0 auto; }
     .tmpl-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(255,255,255,0.3); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
     .tmpl-label::before { content: ''; width: 20px; height: 2px; background: linear-gradient(90deg, #E8215A, #9B27AF); border-radius: 1px; }
@@ -28,23 +28,25 @@
       <div class="tmpl-label">Приветственное письмо</div>
       <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
         <!-- EMAIL START -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
-          <tr><td align="center" style="padding:40px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
+        <table style="width:100%;border-collapse:collapse;background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+          <tr><td style="text-align:center;padding:40px 24px;">
+            <table style="width:100%;border-collapse:collapse;max-width:560px;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
               <!-- Logo -->
-              <tr><td align="center" style="padding-bottom:32px;">
+              <tr><td style="text-align:center;padding-bottom:32px;">
                 <span style="font-size:28px;font-weight:900;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">creator</span><span style="font-size:10px;font-weight:700;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;vertical-align:super;">®</span>
               </td></tr>
               <!-- Card -->
               <tr><td style="background:#111116;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 32px;">
                 <div style="font-size:48px;text-align:center;margin-bottom:20px;">👋</div>
                 <h2 style="color:#fff;font-size:22px;font-weight:900;text-align:center;margin-bottom:12px;">Добро пожаловать!</h2>
-                <p style="color:rgba(255,255,255,0.5);font-size:15px;text-align:center;line-height:1.7;margin-bottom:28px;">Привет, <strong style="color:#fff;">{{name}}</strong>! Ты успешно зарегистрировался в creator®. Теперь ты можешь загружать музыку на 30+ платформ.</p>
+                <p style="color:rgba(255,255,255,0.8);font-size:15px;text-align:center;line-height:1.7;margin-bottom:28px;">Привет, <strong style="color:#fff;">{{name}}</strong>! Ты успешно зарегистрировался в creator®. Теперь ты можешь загружать музыку на 30+ платформ.</p>
                 <div style="text-align:center;margin-bottom:28px;">
                   <a href="#" style="display:inline-block;background:linear-gradient(90deg,#E8215A,#9B27AF);color:#fff;padding:13px 36px;border-radius:100px;text-decoration:none;font-weight:800;font-size:14px;">Загрузить первый релиз →</a>
                 </div>
                 <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:20px;">
-                  <p style="color:rgba(255,255,255,0.4);font-size:13px;line-height:1.7;margin:0;">🎵 <strong style="color:rgba(255,255,255,0.7);">Как начать:</strong> Войди в личный кабинет → Нажми «Загрузить релиз» → Заполни форму за 5 минут. Мы проверим и отправим на платформы!</p>
+                  <p style="color:rgba(255,255,255,0.75);font-size:13px;line-height:1.7;margin:0;">🎵 <strong style="color:rgba(255,255,255,0.7);">Как начать:</strong> Войди в личный кабинет → Нажми «Загрузить релиз» → Заполни форму за 5 минут. Мы проверим и отправим на платформы!</p>
                 </div>
               </td></tr>
               <!-- Footer -->
@@ -62,24 +64,27 @@
     <div>
       <div class="tmpl-label">Релиз отправлен на проверку</div>
       <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
-          <tr><td align="center" style="padding:40px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
-              <tr><td align="center" style="padding-bottom:32px;">
+        <table style="width:100%;border-collapse:collapse;background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+          <tr><td style="text-align:center;padding:40px 24px;">
+            <table style="width:100%;border-collapse:collapse;max-width:560px;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+              <tr><td style="text-align:center;padding-bottom:32px;">
                 <span style="font-size:28px;font-weight:900;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">creator</span><span style="font-size:10px;font-weight:700;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;vertical-align:super;">®</span>
               </td></tr>
               <tr><td style="background:#111116;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 32px;">
                 <div style="font-size:48px;text-align:center;margin-bottom:20px;">📤</div>
                 <h2 style="color:#fff;font-size:22px;font-weight:900;text-align:center;margin-bottom:12px;">Релиз получен!</h2>
-                <p style="color:rgba(255,255,255,0.5);font-size:15px;text-align:center;line-height:1.7;margin-bottom:24px;">Мы получили твой релиз и начинаем проверку. Обычно это занимает 1–2 рабочих дня.</p>
+                <p style="color:rgba(255,255,255,0.8);font-size:15px;text-align:center;line-height:1.7;margin-bottom:24px;">Мы получили твой релиз и начинаем проверку. Обычно это занимает 1–2 рабочих дня.</p>
                 <!-- Release info card -->
                 <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;margin-bottom:24px;">
-                  <table width="100%" cellpadding="0" cellspacing="0">
+                  <table style="width:100%;border-collapse:collapse;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
                     <tr>
                       <td style="width:56px;vertical-align:top;"><div style="width:56px;height:56px;border-radius:12px;background:rgba(155,39,175,0.15);display:flex;align-items:center;justify-content:center;font-size:28px;text-align:center;line-height:56px;">🎵</div></td>
                       <td style="padding-left:16px;vertical-align:top;">
                         <p style="color:#fff;font-size:16px;font-weight:800;margin:0 0 4px;">{{track_title}}</p>
-                        <p style="color:rgba(255,255,255,0.4);font-size:13px;margin:0;">{{artist}} · {{type}} · {{genre}}</p>
+                        <p style="color:rgba(255,255,255,0.75);font-size:13px;margin:0;">{{artist}} · {{type}} · {{genre}}</p>
                       </td>
                     </tr>
                   </table>
@@ -101,19 +106,21 @@
     <div>
       <div class="tmpl-label">Релиз одобрен</div>
       <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
-          <tr><td align="center" style="padding:40px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
-              <tr><td align="center" style="padding-bottom:32px;">
+        <table style="width:100%;border-collapse:collapse;background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+          <tr><td style="text-align:center;padding:40px 24px;">
+            <table style="width:100%;border-collapse:collapse;max-width:560px;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+              <tr><td style="text-align:center;padding-bottom:32px;">
                 <span style="font-size:28px;font-weight:900;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">creator</span><span style="font-size:10px;font-weight:700;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;vertical-align:super;">®</span>
               </td></tr>
               <tr><td style="background:#111116;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 32px;">
                 <div style="font-size:48px;text-align:center;margin-bottom:20px;">🎉</div>
                 <h2 style="color:#fff;font-size:22px;font-weight:900;text-align:center;margin-bottom:12px;">Релиз одобрен!</h2>
-                <p style="color:rgba(255,255,255,0.5);font-size:15px;text-align:center;line-height:1.7;margin-bottom:24px;">Отличные новости! Твой релиз <strong style="color:#fff;">«{{track_title}}»</strong> прошёл проверку и отправлен на все платформы.</p>
+                <p style="color:rgba(255,255,255,0.8);font-size:15px;text-align:center;line-height:1.7;margin-bottom:24px;">Отличные новости! Твой релиз <strong style="color:#fff;">«{{track_title}}»</strong> прошёл проверку и отправлен на все платформы.</p>
                 <div style="background:rgba(39,201,63,0.08);border:1px solid rgba(39,201,63,0.15);border-radius:14px;padding:20px;text-align:center;margin-bottom:24px;">
                   <p style="color:#27C93F;font-size:14px;font-weight:700;margin:0 0 8px;">✅ Опубликован</p>
-                  <p style="color:rgba(255,255,255,0.4);font-size:13px;margin:0;">Трек появится на платформах в течение 24–48 часов</p>
+                  <p style="color:rgba(255,255,255,0.75);font-size:13px;margin:0;">Трек появится на платформах в течение 24–48 часов</p>
                 </div>
                 <div style="text-align:center;">
                   <a href="#" style="display:inline-block;background:linear-gradient(90deg,#E8215A,#9B27AF);color:#fff;padding:13px 36px;border-radius:100px;text-decoration:none;font-weight:800;font-size:14px;">Открыть в кабинете →</a>
@@ -132,16 +139,18 @@
     <div>
       <div class="tmpl-label">Релиз отклонён</div>
       <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
-          <tr><td align="center" style="padding:40px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;">
-              <tr><td align="center" style="padding-bottom:32px;">
+        <table style="width:100%;border-collapse:collapse;background:#0A0A0C;font-family:'Nunito',Helvetica,Arial,sans-serif;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+          <tr><td style="text-align:center;padding:40px 24px;">
+            <table style="width:100%;border-collapse:collapse;max-width:560px;">
+<thead><tr><th scope="col" style="display:none;font-size:0;line-height:0;padding:0;margin:0;"></th></tr></thead>
+              <tr><td style="text-align:center;padding-bottom:32px;">
                 <span style="font-size:28px;font-weight:900;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">creator</span><span style="font-size:10px;font-weight:700;background:linear-gradient(90deg,#E8215A,#9B27AF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;vertical-align:super;">®</span>
               </td></tr>
               <tr><td style="background:#111116;border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:40px 32px;">
                 <div style="font-size:48px;text-align:center;margin-bottom:20px;">⚠️</div>
                 <h2 style="color:#fff;font-size:22px;font-weight:900;text-align:center;margin-bottom:12px;">Нужны правки</h2>
-                <p style="color:rgba(255,255,255,0.5);font-size:15px;text-align:center;line-height:1.7;margin-bottom:24px;">Релиз <strong style="color:#fff;">«{{track_title}}»</strong> не прошёл проверку. Пожалуйста, исправь замечания и отправь заново.</p>
+                <p style="color:rgba(255,255,255,0.8);font-size:15px;text-align:center;line-height:1.7;margin-bottom:24px;">Релиз <strong style="color:#fff;">«{{track_title}}»</strong> не прошёл проверку. Пожалуйста, исправь замечания и отправь заново.</p>
                 <div style="background:rgba(232,33,90,0.08);border:1px solid rgba(232,33,90,0.15);border-radius:14px;padding:20px;margin-bottom:24px;">
                   <p style="color:#E8215A;font-size:13px;font-weight:700;margin:0 0 10px;">Причина:</p>
                   <p style="color:rgba(255,255,255,0.5);font-size:14px;line-height:1.7;margin:0;">{{rejection_reason}}</p>

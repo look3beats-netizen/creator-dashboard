@@ -14,7 +14,7 @@
       --bg: #0A0A0C;
       --bg2: #111116;
       --text: #FFFFFF;
-      --muted: rgba(255,255,255,0.45);
+      --muted: rgba(255,255,255,0.75);
       --muted2: rgba(255,255,255,0.25);
       --line: rgba(255,255,255,0.08);
       --line2: rgba(255,255,255,0.12);
@@ -329,18 +329,18 @@
         <div class="error-msg" id="login-error">Неверный email или пароль</div>
 
         <div class="f-group">
-          <label>Email</label>
+          <label for="login-email">Email</label>
           <input type="email" id="login-email" placeholder="your@email.com">
         </div>
         <div class="f-group">
-          <label>Пароль</label>
+          <label for="login-password">Пароль</label>
           <input type="password" id="login-password" placeholder="••••••••">
         </div>
         <a href="#" class="forgot">Забыл пароль?</a>
         <button class="btn-submit" onclick="handleLogin()">Войти →</button>
 
         <p class="agreement">
-          Нет аккаунта? <a href="#" onclick="switchTab('register')">Зарегистрироваться</a>
+          Нет аккаунта? <button type="button" class="switch-link" onclick="switchTab('register')">Зарегистрироваться</button>
         </p>
       </div>
 
@@ -353,19 +353,19 @@
         <div class="success-msg" id="reg-success">Аккаунт создан! Теперь войди.</div>
 
         <div class="f-group">
-          <label>Имя артиста</label>
+          <label for="reg-name">Имя артиста</label>
           <input type="text" id="reg-name" placeholder="Твой псевдоним">
         </div>
         <div class="f-group">
-          <label>Email</label>
+          <label for="reg-email">Email</label>
           <input type="email" id="reg-email" placeholder="your@email.com">
         </div>
         <div class="f-group">
-          <label>Пароль</label>
+          <label for="reg-password">Пароль</label>
           <input type="password" id="reg-password" placeholder="Минимум 6 символов">
         </div>
         <div class="f-group">
-          <label>Повтори пароль</label>
+          <label for="reg-password2">Повтори пароль</label>
           <input type="password" id="reg-password2" placeholder="••••••••">
         </div>
         <button class="btn-submit" onclick="handleRegister()">Создать аккаунт →</button>
@@ -416,7 +416,7 @@
 
       errorEl.classList.remove('show');
       localStorage.setItem('cr_current_user', JSON.stringify(user));
-      window.location.href = 'dashboard.html';
+      globalThis.location.href = 'dashboard.html';
     }
 
     function handleRegister() {
@@ -450,7 +450,7 @@
 
       const users = JSON.parse(localStorage.getItem('cr_users') || '[]');
 
-      if (users.find(u => u.email === email)) {
+      if (users.some(u => u.email === email)) {
         errorEl.textContent = 'Этот email уже зарегистрирован';
         errorEl.classList.add('show');
         return;
@@ -480,7 +480,7 @@
     border-radius: 50%;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.85);
     font-size: 16px;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
@@ -495,7 +495,7 @@
     --bg2: #FFFFFF;
     --bg3: #EEECEA;
     --text: #0A0A0C;
-    --muted: rgba(0,0,0,0.45);
+    --muted: rgba(0,0,0,0.65);
     --muted2: rgba(0,0,0,0.25);
     --line: rgba(0,0,0,0.08);
     --line2: rgba(0,0,0,0.12);
@@ -504,7 +504,7 @@
   body.light .theme-btn {
     background: rgba(0,0,0,0.06);
     border-color: rgba(0,0,0,0.12);
-    color: rgba(0,0,0,0.5);
+    color: rgba(0,0,0,0.7);
   }
   body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
 

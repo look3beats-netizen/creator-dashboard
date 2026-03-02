@@ -54,7 +54,7 @@ function updateThemeButton() {
 function checkAuth() {
   AppState.currentUser = getCurrentUser();
   if (!AppState.currentUser) {
-    window.location.href = 'login.html';
+    globalThis.location.href = 'login.html';
     return false;
   }
   return true;
@@ -121,7 +121,7 @@ function saveProfile() {
 
 function logout() {
   removeCurrentUser();
-  window.location.href = 'login.html';
+  globalThis.location.href = 'login.html';
 }
 
 // ═══════════════════════════════════════════════════════════

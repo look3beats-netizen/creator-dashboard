@@ -4,8 +4,6 @@
 // Без localStorage. Без бизнес-логики релизов.
 // ═══════════════════════════════════════════════════════════
 
-import AppState from '../core/state.js';
-
 // ─── Карта навигации ───
 const NAV_MAP = {
   overview: 0,
@@ -17,7 +15,7 @@ const NAV_MAP = {
   profile: 6
 };
 
-const SKELETON_SCREENS = ['overview', 'releases', 'analytics', 'platforms'];
+const SKELETON_SCREENS = new Set(['overview', 'releases', 'analytics', 'platforms']);
 
 // ─── Колбэки при переходе на экран ───
 let screenChangeCallbacks = {};
@@ -40,7 +38,7 @@ function showScreen(name) {
   const screen = document.getElementById('screen-' + name);
   if (!screen) return;
 
-  if (SKELETON_SCREENS.includes(name)) {
+  if (SKELETON_SCREENS.has(name)) {
     showSkeleton(screen);
     setTimeout(() => hideSkeleton(screen), 400);
   } else {
@@ -52,9 +50,9 @@ function showScreen(name) {
     items[NAV_MAP[name]].classList.add('active');
   }
 
-  window.scrollTo(0, 0);
+  globalThis.scrollTo(0, 0);
 
-  if (window.location.hash !== '#' + name) {
+  if (globalThis.location.hash !== '#' + name) {
     history.replaceState(null, '', '#' + name);
   }
 
@@ -98,7 +96,7 @@ function hideSkeleton(screen) {
 
 // ─── Hash-роутинг ───
 function handleHashRoute() {
-  const hash = window.location.hash.replace('#', '');
+  const hash = globalThis.location.hash.replace('#', '');
   if (hash && NAV_MAP[hash] !== undefined) {
     showScreen(hash);
   }
@@ -119,11 +117,11 @@ function bindNavigationEvents() {
     const hrefEl = e.target.closest('[data-href]');
     if (hrefEl) {
       e.preventDefault();
-      window.open(hrefEl.dataset.href, '_blank');
+      globalThis.open(hrefEl.dataset.href, '_blank');
     }
   });
 
-  window.addEventListener('hashchange', handleHashRoute);
+  globalThis.addEventListener('hashchange', handleHashRoute);
 }
 
 // ─── INIT ───

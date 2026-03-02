@@ -191,11 +191,11 @@
       <div>
         <p class="section-label">Каналы связи</p>
         <div class="contact-cards">
-          <a href="mailto:help@creator.ru" class="contact-card">
+          <a href="/cdn-cgi/l/email-protection#6a020f061a2a09180f0b1e051844181f" class="contact-card">
             <div class="contact-icon">✉️</div>
             <div class="contact-card-info">
               <h3>Email</h3>
-              <p>help@creator.ru</p>
+              <p><span class="__cf_email__" data-cfemail="6008050c102003120501140f124e1215">[email&#160;protected]</span></p>
               <span>Ответ в течение 24 часов</span>
             </div>
             <div class="contact-arrow">→</div>
@@ -251,16 +251,16 @@
           <div class="form-body" id="contact-form">
             <div class="f-row">
               <div class="f-group">
-                <label>Имя</label>
+                <label for="c-name">Имя</label>
                 <input type="text" id="c-name" placeholder="Твоё имя">
               </div>
               <div class="f-group">
-                <label>Email</label>
+                <label for="c-email">Email</label>
                 <input type="email" id="c-email" placeholder="your@email.com">
               </div>
             </div>
             <div class="f-group">
-              <label>Тема</label>
+              <label for="c-topic">Тема</label>
               <select id="c-topic">
                 <option value="">Выбери тему</option>
                 <option>Загрузка релиза</option>
@@ -271,7 +271,7 @@
               </select>
             </div>
             <div class="f-group">
-              <label>Сообщение</label>
+              <label for="c-message">Сообщение</label>
               <textarea id="c-message" placeholder="Опиши свой вопрос или проблему..."></textarea>
             </div>
             <button class="btn-submit" onclick="sendContact()">Отправить сообщение →</button>
@@ -306,7 +306,7 @@
     </div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     function sendContact() {
       const name = document.getElementById('c-name').value.trim();
       const email = document.getElementById('c-email').value.trim();
@@ -332,10 +332,10 @@
       });
     });
 
-    window._navigate = function(href){
+    globalThis._navigate = function(href){
       const loader = document.getElementById('page-loader');
       loader.style.opacity = '1'; loader.style.pointerEvents = 'all';
-      setTimeout(() => { window.location.href = href; }, 350);
+      setTimeout(() => { globalThis.location.href = href; }, 350);
     };
     document.addEventListener('click', function(e){
       const link = e.target.closest('a[href]');
@@ -343,7 +343,7 @@
       const href = link.getAttribute('href');
       if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto')) return;
       e.preventDefault();
-      window._navigate(href);
+      globalThis._navigate(href);
     });
   </script>
   <!-- THEME TOGGLE -->
@@ -353,7 +353,7 @@
     border-radius: 50%;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.85);
     font-size: 16px;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
@@ -377,7 +377,7 @@
   body.light .theme-btn {
     background: rgba(0,0,0,0.06);
     border-color: rgba(0,0,0,0.12);
-    color: rgba(0,0,0,0.5);
+    color: rgba(0,0,0,0.7);
   }
   body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
 
@@ -404,11 +404,4 @@
   })();
 
   function toggleTheme() {
-    const isLight = document.body.classList.toggle('light');
-    localStorage.setItem('cr_theme', isLight ? 'light' : 'dark');
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.textContent = isLight ? '🌙' : '☀️';
-  }
-</script>
-</body>
-</html>
+    const isLight = document.body.clas

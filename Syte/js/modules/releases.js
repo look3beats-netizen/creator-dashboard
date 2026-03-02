@@ -9,8 +9,6 @@
 import AppState from '../core/state.js';
 import {
   getReleasesByEmail,
-  getAllReleases,
-  saveAllReleases,
   addRelease as dpAddRelease,
   deleteRelease as dpDeleteRelease,
   findReleaseById,
@@ -68,7 +66,7 @@ function renderReleaseCard(r) {
   const icon = typeIcons[r.type] || '🎵';
   const typeName = typeNames[r.type] || 'Сингл';
   const date = new Date(r.createdAt).toLocaleDateString('ru-RU');
-  const coverHtml = r.coverData && r.coverData.startsWith('data:')
+  const coverHtml = r.coverData?.startsWith('data:')
     ? `<img src="${r.coverData}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`
     : icon;
   return `
@@ -137,12 +135,14 @@ function renderArtistProgress() {
   el.innerHTML = `
     <div class="progress-title">🏆 Путь артиста</div>
     <div class="progress-steps">
-      ${milestones.map((m, i) => `
-        <div class="progress-step ${m.done ? 'done' : i === currentIdx ? 'current' : ''}">
+      ${milestones.map((m, i) => {
+        const stepClass = m.done ? 'done' : (i === currentIdx ? 'current' : '');
+        return `
+        <div class="progress-step ${stepClass}">
           <div class="progress-step-icon">${m.done ? '✅' : m.icon}</div>
           <div class="progress-step-label">${m.label}</div>
         </div>
-      `).join('')}
+      `; }).join('')}
     </div>
   `;
 }
@@ -203,30 +203,42 @@ function updateBars(step) {
   document.getElementById('form-step-label').textContent = labels[step - 1];
 }
 
+function validateStep1() {
+  if (!AppState.selectedPrimaryArtist) {
+    showToast('⚠️ Выбери или создай профиль основного исполнителя', 'error');
+    return false;
+  }
+  return true;
+}
+
+function validateStep2() {
+  const title = document.getElementById('track-title').value.trim();
+  const genre = document.getElementById('track-genre').value;
+  const date = document.getElementById('track-date').value;
+  if (!title || !genre || !date) {
+    showToast('⚠️ Заполни все обязательные поля', 'error');
+    return false;
+  }
+  updateStep3UI();
+  return true;
+}
+
+function validateStep3() {
+  if (AppState.selectedType === 'single') {
+    if (!AppState.audioFiles.length) { showToast('⚠️ Загрузи аудиофайл', 'error'); return false; }
+  } else if (AppState.audioFiles.length < 2) {
+    showToast('⚠️ Загрузи минимум 2 трека для ' + (AppState.selectedType === 'ep' ? 'EP' : 'Альбома'), 'error');
+    return false;
+  }
+  if (!AppState.coverFile) { showToast('⚠️ Загрузи обложку', 'error'); return false; }
+  updateSummary();
+  return true;
+}
+
 function nextStep(from) {
-  if (from === 1) {
-    if (!AppState.selectedPrimaryArtist) {
-      showToast('⚠️ Выбери или создай профиль основного исполнителя', 'error'); return;
-    }
-  }
-  if (from === 2) {
-    const title = document.getElementById('track-title').value.trim();
-    const genre = document.getElementById('track-genre').value;
-    const date = document.getElementById('track-date').value;
-    if (!title || !genre || !date) {
-      showToast('⚠️ Заполни все обязательные поля', 'error'); return;
-    }
-    updateStep3UI();
-  }
-  if (from === 3) {
-    if (AppState.selectedType === 'single') {
-      if (!AppState.audioFiles.length) { showToast('⚠️ Загрузи аудиофайл', 'error'); return; }
-    } else {
-      if (AppState.audioFiles.length < 2) { showToast('⚠️ Загрузи минимум 2 трека для ' + (AppState.selectedType === 'ep' ? 'EP' : 'Альбома'), 'error'); return; }
-    }
-    if (!AppState.coverFile) { showToast('⚠️ Загрузи обложку', 'error'); return; }
-    updateSummary();
-  }
+  if (from === 1 && !validateStep1()) return;
+  if (from === 2 && !validateStep2()) return;
+  if (from === 3 && !validateStep3()) return;
   slideStep(from, from + 1);
 }
 
@@ -321,7 +333,7 @@ function searchArtists(query, type) {
       <div class="ao-avatar">+</div>
       <div class="ao-info"><div class="ao-name">Создать нового артиста</div><div class="ao-meta">Новый профиль с привязкой к платформам</div></div>
     </div>`;
-  } else if (q && !matches.find(a => a.name.toLowerCase() === q)) {
+  } else if (q && !matches.some(a => a.name.toLowerCase() === q)) {
     html += `<div class="artist-option create-new" data-artist-action="quick-feat" data-quick-name="${query.trim()}">
       <div class="ao-avatar">+</div>
       <div class="ao-info"><div class="ao-name">Добавить «${query.trim()}»</div><div class="ao-meta">Как feat. артист</div></div>
@@ -387,7 +399,7 @@ function saveNewArtist() {
 }
 
 function addFeatArtist(artist) {
-  if (AppState.featArtists.find(a => a.name === artist.name)) return;
+  if (AppState.featArtists.some(a => a.name === artist.name)) return;
   AppState.featArtists.push(artist);
   renderFeatTags();
   document.getElementById('feat-artist-input').value = '';
@@ -680,7 +692,7 @@ function updateSummary() {
 
   const summCover = document.getElementById('summary-cover');
   const coverPreview = document.getElementById('cover-preview');
-  if (coverPreview && coverPreview.src && AppState.coverFile) {
+  if (coverPreview?.src && AppState.coverFile) {
     summCover.src = coverPreview.src;
     summCover.style.display = 'block';
   } else {
@@ -831,6 +843,35 @@ function infoRow(icon, label, value) {
   return `<div style="background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:12px 14px;"><div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:4px;">${icon} ${label}</div><div style="font-size:14px;font-weight:700;">${value}</div></div>`;
 }
 
+function buildRichTracksHtml(tracks) {
+  return `<div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:12px;">🎵 Треклист (${tracks.length})</div>
+    ${tracks.map((t, i) => `
+      <div style="padding:10px 0;${i > 0 ? 'border-top:1px solid var(--line);' : ''}">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <span style="font-size:12px;font-weight:800;color:var(--muted2);width:20px;">${i+1}.</span>
+          <span style="font-size:14px;font-weight:800;">${t.title || t.fileName}</span>
+          ${t.explicit === 'yes' ? '<span style="font-size:10px;font-weight:800;background:rgba(232,33,90,0.15);color:#E8215A;padding:1px 6px;border-radius:4px;">E</span>' : ''}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-left:30px;font-size:12px;color:var(--muted);">
+          ${t.artist ? '<span>🎤 ' + t.artist + '</span>' : ''}
+          ${t.feat ? '<span>ft. ' + t.feat + '</span>' : ''}
+          ${t.producer ? '<span>🎛️ ' + t.producer + '</span>' : ''}
+          ${t.writer ? '<span>✍️ ' + t.writer + '</span>' : ''}
+          ${t.isrc ? '<span>ISRC: ' + t.isrc + '</span>' : ''}
+        </div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function buildSimpleTracksHtml(tracks) {
+  return `<div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:10px;">🎵 Треклист (${tracks.length})</div>
+    ${tracks.map((t, i) => `<div style="font-size:13px;padding:4px 0;color:var(--muted);"><span style="color:var(--muted2);margin-right:8px;">${i+1}.</span> ${t}</div>`).join('')}
+  </div>`;
+}
+
 function openRelease(id) {
   const r = findReleaseById(id);
   if (!r) return;
@@ -849,39 +890,18 @@ function openRelease(id) {
   const createdDate = new Date(r.createdAt).toLocaleDateString('ru-RU');
 
   let tracksHtml = '';
-  if (r.tracks && r.tracks.length > 0) {
+  if (r.tracks?.length > 0) {
     const isRichTracks = typeof r.tracks[0] === 'object';
     if (isRichTracks) {
-      tracksHtml = `<div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:12px;">🎵 Треклист (${r.tracks.length})</div>
-        ${r.tracks.map((t, i) => `
-          <div style="padding:10px 0;${i > 0 ? 'border-top:1px solid var(--line);' : ''}">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
-              <span style="font-size:12px;font-weight:800;color:var(--muted2);width:20px;">${i+1}.</span>
-              <span style="font-size:14px;font-weight:800;">${t.title || t.fileName}</span>
-              ${t.explicit === 'yes' ? '<span style="font-size:10px;font-weight:800;background:rgba(232,33,90,0.15);color:#E8215A;padding:1px 6px;border-radius:4px;">E</span>' : ''}
-            </div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-left:30px;font-size:12px;color:var(--muted);">
-              ${t.artist ? '<span>🎤 ' + t.artist + '</span>' : ''}
-              ${t.feat ? '<span>ft. ' + t.feat + '</span>' : ''}
-              ${t.producer ? '<span>🎛️ ' + t.producer + '</span>' : ''}
-              ${t.writer ? '<span>✍️ ' + t.writer + '</span>' : ''}
-              ${t.isrc ? '<span>ISRC: ' + t.isrc + '</span>' : ''}
-            </div>
-          </div>
-        `).join('')}
-      </div>`;
+      tracksHtml = buildRichTracksHtml(r.tracks);
     } else if (r.tracks.length > 1) {
-      tracksHtml = `<div style="background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:12px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);margin-bottom:10px;">🎵 Треклист (${r.tracks.length})</div>
-        ${r.tracks.map((t, i) => `<div style="font-size:13px;padding:4px 0;color:var(--muted);"><span style="color:var(--muted2);margin-right:8px;">${i+1}.</span> ${t}</div>`).join('')}
-      </div>`;
+      tracksHtml = buildSimpleTracksHtml(r.tracks);
     }
   }
 
   document.getElementById('modal-content').innerHTML = `
     <div style="display:flex;align-items:center;gap:20px;margin-bottom:28px;">
-      <div style="width:80px;height:80px;border-radius:14px;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;">${r.coverData && r.coverData.startsWith('data:') ? '<img src="'+r.coverData+'" style="width:100%;height:100%;object-fit:cover;">' : releaseIcon}</div>
+      <div style="width:80px;height:80px;border-radius:14px;background:var(--bg3);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:36px;flex-shrink:0;overflow:hidden;">${r.coverData?.startsWith('data:') ? '<img src="'+r.coverData+'" style="width:100%;height:100%;object-fit:cover;">' : releaseIcon}</div>
       <div>
         <div style="font-size:22px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px;">${r.title}</div>
         <div style="font-size:14px;color:var(--muted);">${r.artist}${r.feat ? ' feat. ' + r.feat : ''} · ${releaseTypeName}</div>
@@ -952,7 +972,7 @@ function applyFilters() {
     filtered = filtered.filter(r =>
       r.title.toLowerCase().includes(q) ||
       r.artist.toLowerCase().includes(q) ||
-      (r.feat && r.feat.toLowerCase().includes(q))
+      (r.feat?.toLowerCase().includes(q))
     );
   }
 
@@ -1099,7 +1119,7 @@ function renderDP() {
     const date = new Date(AppState.dpYear, AppState.dpMonth, d);
     const isPast = date < today;
     const isToday = date.getTime() === today.getTime();
-    const isSelected = AppState.dpSelectedDate && date.getTime() === AppState.dpSelectedDate.getTime();
+    const isSelected = AppState.dpSelectedDate && date.getTime() === AppState.dpSelectedDate?.getTime();
     let cls = 'dp-day';
     if (isPast) cls += ' past';
     if (isToday) cls += ' today';
@@ -1181,7 +1201,7 @@ function renderPlatforms() {
 }
 
 function updatePreview() {
-  const id = parseInt(document.getElementById('preview-select').value);
+  const id = Number.parseInt(document.getElementById('preview-select').value);
   const r = findReleaseById(id);
   const coverEl = document.getElementById('preview-cover');
   if (!r) {
@@ -1192,7 +1212,7 @@ function updatePreview() {
   }
   document.getElementById('preview-title').textContent = r.title;
   document.getElementById('preview-artist').textContent = r.artist + (r.feat ? ' feat. ' + r.feat : '');
-  if (r.coverData && r.coverData.startsWith('data:')) {
+  if (r.coverData?.startsWith('data:')) {
     coverEl.innerHTML = `<img src="${r.coverData}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
   } else {
     const typeIcons = { single: '🎵', ep: '💿', album: '📀' };
@@ -1256,39 +1276,49 @@ function triggerAutosave() {
   AppState.autosaveTimer = setTimeout(saveDraftNow, 1000);
 }
 
+function restoreDraftType(d) {
+  if (!d.type) return;
+  AppState.selectedType = d.type;
+  document.querySelectorAll('.release-type-card').forEach(c => c.classList.remove('active'));
+  const tc = document.querySelector(`.release-type-card[data-type="${d.type}"]`);
+  if (tc) tc.classList.add('active');
+}
+
+function restoreDraftDate(d) {
+  if (!d.date) return;
+  document.getElementById('track-date').value = d.date;
+  const [y,m,day] = d.date.split('-');
+  const trigger = document.getElementById('dp-trigger');
+  trigger.textContent = `${day}.${m}.${y}`;
+  trigger.classList.remove('placeholder');
+}
+
+function restoreDraftFields(d) {
+  if (d.title) document.getElementById('track-title').value = d.title;
+  if (d.primaryArtist) selectPrimaryArtist(d.primaryArtist);
+  if (d.featArtists?.length) { AppState.featArtists = d.featArtists; renderFeatTags(); }
+  if (d.genre) document.getElementById('track-genre').value = d.genre;
+  restoreDraftDate(d);
+  if (d.label) document.getElementById('track-label').value = d.label;
+  if (d.lang) document.getElementById('track-lang').value = d.lang;
+  if (d.explicit) document.getElementById('track-explicit').value = d.explicit;
+  if (d.upc) document.getElementById('track-upc').value = d.upc;
+  if (d.isrc) document.getElementById('track-isrc').value = d.isrc;
+  if (d.preview) document.getElementById('track-preview').value = d.preview;
+  if (d.comment) document.getElementById('track-comment').value = d.comment;
+}
+
 function loadDraft() {
   try {
     const d = dpGetDraft(getDraftKey());
     if (!d) return;
     if (Date.now() - d.savedAt > 86400000) { dpRemoveDraft(getDraftKey()); return; }
     if (d.title || d.feat || d.genre || d.label || d.comment) {
-      if (d.type) {
-        AppState.selectedType = d.type;
-        document.querySelectorAll('.release-type-card').forEach(c => c.classList.remove('active'));
-        const tc = document.querySelector(`.release-type-card[data-type="${d.type}"]`);
-        if (tc) tc.classList.add('active');
-      }
-      if (d.title) document.getElementById('track-title').value = d.title;
-      if (d.primaryArtist) selectPrimaryArtist(d.primaryArtist);
-      if (d.featArtists && d.featArtists.length) { AppState.featArtists = d.featArtists; renderFeatTags(); }
-      if (d.genre) document.getElementById('track-genre').value = d.genre;
-      if (d.date) {
-        document.getElementById('track-date').value = d.date;
-        const [y,m,day] = d.date.split('-');
-        const trigger = document.getElementById('dp-trigger');
-        trigger.textContent = `${day}.${m}.${y}`;
-        trigger.classList.remove('placeholder');
-      }
-      if (d.label) document.getElementById('track-label').value = d.label;
-      if (d.lang) document.getElementById('track-lang').value = d.lang;
-      if (d.explicit) document.getElementById('track-explicit').value = d.explicit;
-      if (d.upc) document.getElementById('track-upc').value = d.upc;
-      if (d.isrc) document.getElementById('track-isrc').value = d.isrc;
-      if (d.preview) document.getElementById('track-preview').value = d.preview;
-      if (d.comment) document.getElementById('track-comment').value = d.comment;
+      restoreDraftType(d);
+      restoreDraftFields(d);
       showToast('📝 Черновик восстановлен', 'success');
     }
-  } catch (e) {}
+  } catch (e) { console.warn('Draft parse error:', e); }
 }
 
 function clearDraft() {
@@ -1299,6 +1329,126 @@ function clearDraft() {
 // EVENT BINDING (заменяет все inline-обработчики)
 // ═══════════════════════════════════════════════════════════
 
+function handleDelegatedAction(action) {
+  switch (action.dataset.action) {
+    case 'submit-release':      submitRelease(); return true;
+    case 'new-release':         newRelease(); return true;
+    case 'close-release-modal': closeModal(); return true;
+    case 'close-track-modal':   closeTrackModal(); return true;
+    case 'save-track-meta':     saveTrackMeta(); return true;
+    case 'save-new-artist':     saveNewArtist(); return true;
+    case 'cancel-new-artist':   cancelNewArtist(); return true;
+    case 'toggle-datepicker':   toggleDatepicker(); return true;
+    case 'dp-prev':             dpPrev(); return true;
+    case 'dp-next':             dpNext(); return true;
+    case 'mark-all-read':       markAllRead(); return true;
+    case 'add-tracks-multi':    document.getElementById('audio-input-multi').click(); return true;
+    default: return false;
+  }
+}
+
+function handleArtistAction(artistAction) {
+  const act = artistAction.dataset.artistAction;
+  if (act === 'primary' || act === 'feat') {
+    const artist = JSON.parse(decodeURIComponent(artistAction.dataset.artistJson));
+    if (act === 'primary') selectPrimaryArtist(artist);
+    else addFeatArtist(artist);
+    return true;
+  }
+  if (act === 'new-artist') { showNewArtistForm(); return true; }
+  if (act === 'quick-feat') { quickAddFeat(artistAction.dataset.quickName); return true; }
+  if (act === 'remove-primary') { removePrimaryArtist(); return true; }
+  return false;
+}
+
+function handleReleaseCardClick(e) {
+  const openEl = e.target.closest('[data-action="open"]');
+  if (openEl) {
+    const card = openEl.closest('.release-card');
+    if (card) { openRelease(Number.parseInt(card.dataset.releaseId)); return true; }
+  }
+  const delEl = e.target.closest('[data-action="delete"]');
+  if (delEl) {
+    const card = delEl.closest('.release-card');
+    if (card) { handleDeleteRelease(Number.parseInt(card.dataset.releaseId)); return true; }
+  }
+  return false;
+}
+
+function bindFileInputs() {
+  const audioInput = document.getElementById('audio-input');
+  if (audioInput) {
+    audioInput.addEventListener('change', function() {
+      const files = Array.from(this.files);
+      if (!files.length) return;
+      handleAudioFiles(files);
+      this.value = '';
+    });
+  }
+
+  const audioMulti = document.getElementById('audio-input-multi');
+  if (audioMulti) {
+    audioMulti.addEventListener('change', function() {
+      const files = Array.from(this.files);
+      files.forEach(f => {
+        AppState.audioFiles.push(f);
+        AppState.trackMeta.push({ title: f.name.replace(/\.[^.]+$/, ''), artist: '', feat: '', producer: '', writer: '', isrc: '', explicit: 'no', lyrics: '' });
+      });
+      renderTrackList();
+      this.value = '';
+    });
+  }
+
+  const coverInput = document.getElementById('cover-input');
+  if (coverInput) {
+    coverInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => handleCoverFile(file, ev.target.result);
+      reader.readAsDataURL(file);
+      this.value = '';
+    });
+  }
+}
+
+function bindTrackDrag() {
+  const trackListEl = document.getElementById('track-list');
+  if (!trackListEl) return;
+  trackListEl.addEventListener('dragstart', (e) => {
+    const item = e.target.closest('.track-item');
+    if (item) trackDragStart(e, Number.parseInt(item.dataset.index));
+  });
+  trackListEl.addEventListener('dragover', (e) => {
+    const item = e.target.closest('.track-item');
+    if (item) trackDragOver(e, Number.parseInt(item.dataset.index));
+  });
+  trackListEl.addEventListener('drop', (e) => {
+    const item = e.target.closest('.track-item');
+    if (item) trackDrop(e, Number.parseInt(item.dataset.index));
+  });
+  trackListEl.addEventListener('dragend', trackDragEnd);
+}
+
+function bindFormSelects() {
+  const genreSelect = document.getElementById('track-genre');
+  if (genreSelect) genreSelect.addEventListener('change', updateSubgenres);
+
+  const prevRel = document.getElementById('track-previously-released');
+  if (prevRel) {
+    prevRel.addEventListener('change', function() {
+      const row = document.getElementById('orig-date-row');
+      if (row) row.style.display = this.value === 'yes' ? 'grid' : 'none';
+    });
+  }
+
+  const previewSel = document.getElementById('preview-select');
+  if (previewSel) previewSel.addEventListener('change', updatePreview);
+
+  const previewPlat = document.getElementById('preview-platform');
+  if (previewPlat) previewPlat.addEventListener('change', updatePreviewPlatform);
+}
+
 function bindEvents() {
   // ═══════════════════════════════════════════════════════════
   // DELEGATED CLICK HANDLER
@@ -1307,29 +1457,14 @@ function bindEvents() {
 
     // ─── data-action (release-specific actions) ───
     const action = e.target.closest('[data-action]');
-    if (action) {
-      switch (action.dataset.action) {
-        case 'submit-release':      submitRelease(); return;
-        case 'new-release':         newRelease(); return;
-        case 'close-release-modal': closeModal(); return;
-        case 'close-track-modal':   closeTrackModal(); return;
-        case 'save-track-meta':     saveTrackMeta(); return;
-        case 'save-new-artist':     saveNewArtist(); return;
-        case 'cancel-new-artist':   cancelNewArtist(); return;
-        case 'toggle-datepicker':   toggleDatepicker(); return;
-        case 'dp-prev':             dpPrev(); return;
-        case 'dp-next':             dpNext(); return;
-        case 'mark-all-read':       markAllRead(); return;
-        case 'add-tracks-multi':    document.getElementById('audio-input-multi').click(); return;
-      }
-    }
+    if (action && handleDelegatedAction(action)) return;
 
     // ─── data-next-step / data-prev-step ───
     const nextEl = e.target.closest('[data-next-step]');
-    if (nextEl) { nextStep(parseInt(nextEl.dataset.nextStep)); return; }
+    if (nextEl) { nextStep(Number.parseInt(nextEl.dataset.nextStep)); return; }
 
     const prevEl = e.target.closest('[data-prev-step]');
-    if (prevEl) { prevStep(parseInt(prevEl.dataset.prevStep)); return; }
+    if (prevEl) { prevStep(Number.parseInt(prevEl.dataset.prevStep)); return; }
 
     // ─── data-filter ───
     const filterEl = e.target.closest('[data-filter]');
@@ -1349,47 +1484,26 @@ function bindEvents() {
     }
 
     // ─── Release cards: open / delete ───
-    const openEl = e.target.closest('[data-action="open"]');
-    if (openEl) {
-      const card = openEl.closest('.release-card');
-      if (card) { openRelease(parseInt(card.dataset.releaseId)); return; }
-    }
-
-    const delEl = e.target.closest('[data-action="delete"]');
-    if (delEl) {
-      const card = delEl.closest('.release-card');
-      if (card) { handleDeleteRelease(parseInt(card.dataset.releaseId)); return; }
-    }
+    if (handleReleaseCardClick(e)) return;
 
     // ─── Artist dropdown actions ───
     const artistAction = e.target.closest('[data-artist-action]');
-    if (artistAction) {
-      const act = artistAction.dataset.artistAction;
-      if (act === 'primary' || act === 'feat') {
-        const artist = JSON.parse(decodeURIComponent(artistAction.dataset.artistJson));
-        if (act === 'primary') selectPrimaryArtist(artist);
-        else addFeatArtist(artist);
-        return;
-      }
-      if (act === 'new-artist') { showNewArtistForm(); return; }
-      if (act === 'quick-feat') { quickAddFeat(artistAction.dataset.quickName); return; }
-      if (act === 'remove-primary') { removePrimaryArtist(); return; }
-    }
+    if (artistAction && handleArtistAction(artistAction)) return;
 
     // ─── Feat tag remove ───
     const featRemove = e.target.closest('[data-feat-remove]');
-    if (featRemove) { removeFeat(parseInt(featRemove.dataset.featRemove)); return; }
+    if (featRemove) { removeFeat(Number.parseInt(featRemove.dataset.featRemove)); return; }
 
     // ─── Notification mark read ───
     const notifItem = e.target.closest('[data-notif-id]');
-    if (notifItem) { markRead(parseInt(notifItem.dataset.notifId)); return; }
+    if (notifItem) { markRead(Number.parseInt(notifItem.dataset.notifId)); return; }
 
     // ─── Track list actions ───
     const trackEdit = e.target.closest('[data-track-edit]');
-    if (trackEdit) { e.stopPropagation(); openTrackEdit(parseInt(trackEdit.dataset.trackEdit)); return; }
+    if (trackEdit) { e.stopPropagation(); openTrackEdit(Number.parseInt(trackEdit.dataset.trackEdit)); return; }
 
     const trackRemove = e.target.closest('[data-track-remove]');
-    if (trackRemove) { e.stopPropagation(); removeTrack(parseInt(trackRemove.dataset.trackRemove)); return; }
+    if (trackRemove) { e.stopPropagation(); removeTrack(Number.parseInt(trackRemove.dataset.trackRemove)); return; }
 
     // ─── Datepicker day click ───
     const dpDay = e.target.closest('[data-dp-date]');
@@ -1402,8 +1516,7 @@ function bindEvents() {
     // ─── Track item click → openTrackEdit ───
     const trackItem = e.target.closest('.track-item-clickable');
     if (trackItem && !e.target.closest('.track-item-drag') && !e.target.closest('[data-track-edit]') && !e.target.closest('[data-track-remove]')) {
-      openTrackEdit(parseInt(trackItem.dataset.index));
-      return;
+      openTrackEdit(Number.parseInt(trackItem.dataset.index));
     }
   });
 
@@ -1431,23 +1544,7 @@ function bindEvents() {
     });
   }
 
-  // ─── Track drag events (delegated) ───
-  const trackListEl = document.getElementById('track-list');
-  if (trackListEl) {
-    trackListEl.addEventListener('dragstart', (e) => {
-      const item = e.target.closest('.track-item');
-      if (item) trackDragStart(e, parseInt(item.dataset.index));
-    });
-    trackListEl.addEventListener('dragover', (e) => {
-      const item = e.target.closest('.track-item');
-      if (item) trackDragOver(e, parseInt(item.dataset.index));
-    });
-    trackListEl.addEventListener('drop', (e) => {
-      const item = e.target.closest('.track-item');
-      if (item) trackDrop(e, parseInt(item.dataset.index));
-    });
-    trackListEl.addEventListener('dragend', trackDragEnd);
-  }
+  bindTrackDrag();
 
   // ─── Close dropdowns on outside click ───
   document.addEventListener('click', (e) => {
@@ -1460,43 +1557,7 @@ function bindEvents() {
     }
   });
 
-  // ─── Audio input ───
-  const audioInput = document.getElementById('audio-input');
-  if (audioInput) {
-    audioInput.addEventListener('change', function() {
-      const files = Array.from(this.files);
-      if (!files.length) return;
-      handleAudioFiles(files);
-      this.value = '';
-    });
-  }
-
-  // ─── Multi audio input ───
-  const audioMulti = document.getElementById('audio-input-multi');
-  if (audioMulti) {
-    audioMulti.addEventListener('change', function() {
-      const files = Array.from(this.files);
-      files.forEach(f => {
-        AppState.audioFiles.push(f);
-        AppState.trackMeta.push({ title: f.name.replace(/\.[^.]+$/, ''), artist: '', feat: '', producer: '', writer: '', isrc: '', explicit: 'no', lyrics: '' });
-      });
-      renderTrackList();
-      this.value = '';
-    });
-  }
-
-  // ─── Cover input ───
-  const coverInput = document.getElementById('cover-input');
-  if (coverInput) {
-    coverInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => handleCoverFile(file, ev.target.result);
-      reader.readAsDataURL(file);
-      this.value = '';
-    });
-  }
+  bindFileInputs();
 
   // ─── Drag & Drop zones ───
   setupDragDrop('audio-zone', function(files) {
@@ -1522,27 +1583,7 @@ function bindEvents() {
     });
   }
 
-  // ─── Genre → subgenre ───
-  const genreSelect = document.getElementById('track-genre');
-  if (genreSelect) {
-    genreSelect.addEventListener('change', updateSubgenres);
-  }
-
-  // ─── Previously released toggle ───
-  const prevRel = document.getElementById('track-previously-released');
-  if (prevRel) {
-    prevRel.addEventListener('change', function() {
-      const row = document.getElementById('orig-date-row');
-      if (row) row.style.display = this.value === 'yes' ? 'grid' : 'none';
-    });
-  }
-
-  // ─── Preview select / platform ───
-  const previewSel = document.getElementById('preview-select');
-  if (previewSel) previewSel.addEventListener('change', updatePreview);
-
-  const previewPlat = document.getElementById('preview-platform');
-  if (previewPlat) previewPlat.addEventListener('change', updatePreviewPlatform);
+  bindFormSelects();
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1550,7 +1591,7 @@ function bindEvents() {
 // ═══════════════════════════════════════════════════════════
 
 function autoCreateArtistProfile() {
-  if (AppState.currentUser && AppState.currentUser.name && getArtistProfiles().length === 0) {
+  if (AppState.currentUser?.name && getArtistProfiles().length === 0) {
     const autoArtist = { id: Date.now(), name: AppState.currentUser.name, spotifyId: '', appleId: '', createdAt: new Date().toISOString() };
     saveArtistProfiles([autoArtist]);
   }

@@ -15,8 +15,8 @@
       --bg2: #111116;
       --bg3: #16161C;
       --text: #FFFFFF;
-      --muted: rgba(255,255,255,0.45);
-      --muted2: rgba(255,255,255,0.2);
+      --muted: rgba(255,255,255,0.75);
+      --muted2: rgba(255,255,255,0.55);
       --line: rgba(255,255,255,0.08);
       --line2: rgba(255,255,255,0.12);
       --grad: linear-gradient(90deg, #E8215A 0%, #9B27AF 100%);
@@ -199,7 +199,9 @@
       border: 1px solid var(--line);
       border-radius: 16px;
       padding: 24px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
 
     .stat-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; }
     .stat-value { font-size: 36px; font-weight: 900; letter-spacing: -1px; background: var(--grad-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
@@ -228,19 +230,7 @@
       pointer-events: none;
     }
 
-    /* MICRO-ANIMATIONS */
-    .stat-card { transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
-    .stat-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-    .analytics-card { transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; }
-    .analytics-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-    .chart-card { transition: border-color 0.2s, box-shadow 0.2s; }
-    .chart-card:hover { border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-    .notif-item { transition: transform 0.2s, border-color 0.2s; }
-    .notif-item:hover { transform: translateX(4px); }
-    .btn-grad-sm { transition: opacity 0.2s, transform 0.15s; }
-    .btn-grad-sm:hover { opacity: 0.85; transform: translateY(-1px); }
-    .btn-next { transition: opacity 0.2s, transform 0.15s; }
-    .btn-next:hover { opacity: 0.85; transform: translateY(-1px); }
+    /* MICRO-ANIMATIONS merged into main selectors */
 
     /* SKELETON LOADING */
     .skeleton-card {
@@ -296,10 +286,10 @@
     .phone-cover { width: 100%; aspect-ratio: 1; border-radius: 8px; background: var(--bg3); margin-bottom: 16px; display: flex; align-items: center; justify-content: center; font-size: 48px; overflow: hidden; }
     .phone-cover img { width: 100%; height: 100%; object-fit: cover; }
     .phone-title { font-size: 16px; font-weight: 900; color: #fff; text-align: center; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .phone-artist { font-size: 13px; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 16px; }
+    .phone-artist { font-size: 13px; color: rgba(255,255,255,0.8); text-align: center; margin-bottom: 16px; }
     .phone-progress { height: 3px; background: rgba(255,255,255,0.1); border-radius: 2px; margin-bottom: 10px; overflow: hidden; }
     .phone-progress-fill { height: 100%; width: 35%; border-radius: 2px; }
-    .phone-time { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
+    .phone-time { display: flex; justify-content: space-between; font-size: 10px; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
     .phone-controls { display: flex; align-items: center; justify-content: center; gap: 24px; }
     .phone-btn { color: rgba(255,255,255,0.7); font-size: 18px; cursor: default; }
     .phone-btn.play { width: 44px; height: 44px; border-radius: 50%; background: #fff; color: #000; display: flex; align-items: center; justify-content: center; font-size: 18px; }
@@ -688,10 +678,10 @@
       font-size: 14px;
       font-weight: 800;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.15s;
     }
 
-    .btn-next:hover { opacity: 0.85; }
+    .btn-next:hover { opacity: 0.85; transform: translateY(-1px); }
     .btn-next:disabled { opacity: 0.4; cursor: not-allowed; }
 
     .success-screen { text-align: center; padding: 48px 28px; }
@@ -795,14 +785,14 @@
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, transform 0.15s;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
       gap: 6px;
     }
 
-    .btn-grad-sm:hover { opacity: 0.85; }
+    .btn-grad-sm:hover { opacity: 0.85; transform: translateY(-1px); }
 
     .notif-badge {
       margin-left: auto;
@@ -824,7 +814,7 @@
       display: flex;
       align-items: flex-start;
       gap: 14px;
-      transition: border-color 0.2s;
+      transition: transform 0.2s, border-color 0.2s;
     }
 
     .notif-item.unread {
@@ -832,7 +822,7 @@
       background: rgba(155,39,175,0.04);
     }
 
-    .notif-item:hover { border-color: var(--line2); }
+    .notif-item:hover { border-color: var(--line2); transform: translateX(4px); }
 
     .notif-icon {
       width: 40px; height: 40px;
@@ -989,7 +979,9 @@
     .analytics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
     .analytics-card {
       background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; padding: 20px;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
+    .analytics-card:hover { transform: translateY(-3px); border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
     .analytics-card .a-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
     .analytics-card .a-value { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
     .analytics-card .a-change { font-size: 12px; font-weight: 700; margin-top: 4px; }
@@ -999,7 +991,9 @@
     .chart-card {
       background: var(--bg2); border: 1px solid var(--line); border-radius: 16px; padding: 24px;
       margin-bottom: 20px;
+      transition: border-color 0.2s, box-shadow 0.2s;
     }
+    .chart-card:hover { border-color: var(--line2); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
     .chart-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; }
     .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding-top: 10px; }
     .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
@@ -1056,13 +1050,13 @@
       --bg2: #FFFFFF;
       --bg3: #EEECEA;
       --text: #0A0A0C;
-      --muted: rgba(0,0,0,0.45);
-      --muted2: rgba(0,0,0,0.25);
+      --muted: rgba(0,0,0,0.65);
+      --muted2: rgba(0,0,0,0.5);
       --line: rgba(0,0,0,0.08);
       --line2: rgba(0,0,0,0.12);
     }
 
-    body.light .theme-btn { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); color: rgba(0,0,0,0.5); }
+    body.light .theme-btn { background: rgba(0,0,0,0.06); border-color: rgba(0,0,0,0.12); color: rgba(0,0,0,0.7); }
     body.light .theme-btn:hover { background: rgba(0,0,0,0.1); }
     body.light .f-group input,
     body.light .f-group select,
@@ -1528,7 +1522,7 @@
               <!-- Primary Artist selector -->
               <div class="f-group">
                 <div class="f-label-row">
-                  <label>Основной исполнитель *</label>
+                  <label for="primary-artist-input">Основной исполнитель *</label>
                   <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Выбери существующий профиль или создай новый. Имя будет отображаться на всех платформах.</div></div>
                 </div>
                 <div class="artist-selector" id="primary-artist-selector">
@@ -1548,16 +1542,16 @@
                   <span class="af-close" data-action="cancel-new-artist">✕</span>
                 </div>
                 <div class="f-group" style="margin-bottom:12px;">
-                  <label>Имя артиста / псевдоним *</label>
+                  <label for="new-artist-name">Имя артиста / псевдоним *</label>
                   <input type="text" id="new-artist-name" placeholder="Как будет отображаться на платформах">
                 </div>
                 <div class="f-row">
                   <div class="f-group" style="margin-bottom:12px;">
-                    <label>Spotify Artist ID</label>
+                    <label for="new-artist-spotify">Spotify Artist ID</label>
                     <input type="text" id="new-artist-spotify" placeholder="Необязательно">
                   </div>
                   <div class="f-group" style="margin-bottom:12px;">
-                    <label>Apple Music ID</label>
+                    <label for="new-artist-apple">Apple Music ID</label>
                     <input type="text" id="new-artist-apple" placeholder="Необязательно">
                   </div>
                 </div>
@@ -1570,7 +1564,7 @@
               <!-- Feat artists -->
               <div class="f-group">
                 <div class="f-label-row">
-                  <label>Feat. артисты</label>
+                  <label for="feat-artist-input">Feat. артисты</label>
                   <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Приглашённые артисты — будут указаны через «feat.» на платформах. Добавь каждого отдельно.</div></div>
                 </div>
                 <div class="artist-search-wrap">
@@ -1594,7 +1588,7 @@
 
               <div class="f-group">
                 <div class="f-label-row">
-                  <label>Название релиза *</label>
+                  <label for="track-title">Название релиза *</label>
                   <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Название без имени артиста. Не добавляй «feat.», «EP», «Single» — платформы сделают это сами.</div></div>
                 </div>
                 <input type="text" id="track-title" placeholder="Например: Лето 2025">
@@ -1603,7 +1597,7 @@
               <div class="f-row">
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Версия</label>
+                    <label for="track-version">Версия</label>
                     <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Укажи если это ремикс, live-версия, deluxe и т.д. Для оригинала — оставь пустым.</div></div>
                   </div>
                   <select id="track-version">
@@ -1620,7 +1614,7 @@
                 </div>
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Язык метаданных</label>
+                    <label for="track-meta-lang">Язык метаданных</label>
                     <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Язык, на котором заполнены название и метаданные, НЕ язык текста песни.</div></div>
                   </div>
                   <select id="track-meta-lang">
@@ -1636,7 +1630,7 @@
               <div class="f-row">
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Жанр *</label>
+                    <label for="track-genre">Жанр *</label>
                   </div>
                   <select id="track-genre">
                     <option value="">Выбери жанр</option>
@@ -1659,7 +1653,7 @@
                 </div>
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Поджанр</label>
+                    <label for="track-subgenre">Поджанр</label>
                   </div>
                   <select id="track-subgenre">
                     <option value="">— Сначала выбери жанр —</option>
@@ -1670,7 +1664,7 @@
               <div class="f-row">
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Дата релиза *</label>
+                    <label for="dp-trigger">Дата релиза *</label>
                     <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Рекомендуем ставить минимум на 2–4 недели вперёд. Платформам нужно время на обработку и модерацию.</div></div>
                   </div>
                   <div class="datepicker-wrap" id="dp-wrap">
@@ -1693,7 +1687,7 @@
                 </div>
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Ненормативная лексика *</label>
+                    <label for="track-explicit">Ненормативная лексика *</label>
                     <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Если в треке есть мат — обязательно отметь. Платформы могут отклонить релиз за неправильную маркировку.</div></div>
                   </div>
                   <select id="track-explicit">
@@ -1707,14 +1701,14 @@
               <div class="f-row">
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Лейбл</label>
+                    <label for="track-label">Лейбл</label>
                     <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Если выпускаешь через лейбл — укажи. Если нет — оставь пустым, на платформах будет «Без лейбла».</div></div>
                   </div>
                   <input type="text" id="track-label" placeholder="Название лейбла или оставь пустым">
                 </div>
                 <div class="f-group">
                   <div class="f-label-row">
-                    <label>Язык текста песни</label>
+                    <label for="track-lang">Язык текста песни</label>
                   </div>
                   <select id="track-lang">
                     <option>Русский</option>
@@ -1729,7 +1723,7 @@
 
               <div class="f-group">
                 <div class="f-label-row">
-                  <label>Копирайт ℗ / ©</label>
+                  <label for="track-copyright">Копирайт ℗ / ©</label>
                   <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Год и имя правообладателя. ℗ — для записи, © — для композиции. Заполняется автоматически из профиля если пусто.</div></div>
                 </div>
                 <input type="text" id="track-copyright" placeholder="Например: 2026 Иван Иванов">
@@ -1737,7 +1731,7 @@
 
               <div class="f-group">
                 <div class="f-label-row">
-                  <label>Ранее опубликованный релиз?</label>
+                  <label for="track-previously-released">Ранее опубликованный релиз?</label>
                   <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">Если трек уже был опубликован ранее на платформах — укажи «Да» и оригинальную дату.</div></div>
                 </div>
                 <select id="track-previously-released">
@@ -1747,7 +1741,7 @@
               </div>
               <div class="f-row" id="orig-date-row" style="display:none;">
                 <div class="f-group">
-                  <label>Оригинальная дата релиза</label>
+                  <label for="track-orig-date">Оригинальная дата релиза</label>
                   <input type="date" id="track-orig-date">
                 </div>
                 <div></div>
@@ -1766,7 +1760,7 @@
 
               <!-- AUDIO UPLOAD -->
               <div class="f-group">
-                <label id="audio-label">Аудиофайл *</label>
+                <label id="audio-label" for="audio-input">Аудиофайл *</label>
                 <div class="upload-zone" id="audio-zone">
                   <input type="file" accept=".mp3,.wav,.flac,.aiff,.m4a" id="audio-input">
                   <div class="u-icon">🎵</div>
@@ -1779,7 +1773,7 @@
               <!-- TRACK LIST (for EP/Album) -->
               <div id="track-list-container" style="display:none;margin-bottom:16px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-                  <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);">Треклист (<span id="track-count-display">0</span>)</label>
+                  <label for="audio-input-multi" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);">Треклист (<span id="track-count-display">0</span>)</label>
                   <button class="btn-grad-sm" style="font-size:11px;padding:5px 12px;" data-action="add-tracks-multi">+ Добавить треки</button>
                   <input type="file" accept=".mp3,.wav,.flac,.aiff,.m4a" id="audio-input-multi" multiple style="display:none;">
                 </div>
@@ -1789,12 +1783,12 @@
               <!-- COVER UPLOAD -->
               <div class="f-group">
                 <div class="f-label-row">
-                  <label>Обложка *</label>
+                  <label for="cover-input">Обложка *</label>
                   <div class="tooltip-wrap"><div class="tooltip-icon">?</div><div class="tooltip-text">JPEG или PNG, минимум 3000×3000 пикселей. Без текста, URL, социальных сетей на обложке — платформы отклонят.</div></div>
                 </div>
                 <div class="upload-zone" id="cover-zone" style="position:relative;overflow:hidden;">
                   <input type="file" accept=".jpg,.jpeg,.png" id="cover-input">
-                  <img class="cover-preview-inline" id="cover-preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:10px;">
+                  <img alt="" class="cover-preview-inline" id="cover-preview" style="display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:10px;">
                   <div id="cover-placeholder">
                     <div class="u-icon">🖼️</div>
                     <p>Нажми или перетащи обложку</p>
@@ -1829,7 +1823,7 @@
 
               <div style="background:var(--bg3);border:1px solid var(--line2);border-radius:14px;padding:18px 20px;margin-bottom:16px;" id="release-summary">
                 <div style="display:flex;align-items:flex-start;gap:20px;">
-                  <img id="summary-cover" style="display:none;width:120px;height:120px;border-radius:12px;object-fit:cover;border:1px solid var(--line2);flex-shrink:0;">
+                  <img alt="" id="summary-cover" style="display:none;width:120px;height:120px;border-radius:12px;object-fit:cover;border:1px solid var(--line2);flex-shrink:0;">
                   <div style="flex:1;">
                     <div class="summary-section">
                       <div class="ss-label">Релиз</div>
@@ -1857,18 +1851,18 @@
 
               <div class="f-row">
                 <div class="f-group">
-                  <label>UPC / EAN</label>
+                  <label for="track-upc">UPC / EAN</label>
                   <input type="text" id="track-upc" placeholder="Сгенерируем автоматически">
                 </div>
                 <div class="f-group">
-                  <label>ISRC (для сингла)</label>
+                  <label for="track-isrc">ISRC (для сингла)</label>
                   <input type="text" id="track-isrc" placeholder="Сгенерируем автоматически">
                 </div>
               </div>
 
               <div class="f-group">
-                <label>Комментарий для команды</label>
-                <textarea id="track-comment" placeholder="Любые пожелания, уточнения или особые инструкции для нашей команды..."></textarea>
+                <label for="release-comment">Комментарий для команды</label>
+                <textarea id="release-comment" id="track-comment" placeholder="Любые пожелания, уточнения или особые инструкции для нашей команды..."></textarea>
               </div>
 
               <div style="background:rgba(39,201,63,0.06);border:1px solid rgba(39,201,63,0.15);border-radius:12px;padding:14px 18px;margin-top:8px;">
@@ -1964,13 +1958,13 @@
               <div class="form-card" style="padding:24px;">
                 <h3 style="font-size:16px;font-weight:800;margin-bottom:16px;">Настрой предпросмотр</h3>
                 <div class="f-group">
-                  <label>Выбери релиз</label>
+                  <label for="preview-select">Выбери релиз</label>
                   <select id="preview-select">
                     <option value="">— Выбери релиз —</option>
                   </select>
                 </div>
                 <div class="f-group">
-                  <label>Платформа</label>
+                  <label for="preview-platform">Платформа</label>
                   <select id="preview-platform">
                     <option value="spotify">Spotify</option>
                     <option value="apple">Apple Music</option>
@@ -2031,15 +2025,15 @@
           <div class="settings-card">
             <h3>Настройки профиля</h3>
             <div class="f-group">
-              <label>Имя артиста</label>
+              <label for="settings-name">Имя артиста</label>
               <input type="text" id="settings-name" placeholder="Твой псевдоним">
             </div>
             <div class="f-group">
-              <label>Email</label>
+              <label for="settings-email">Email</label>
               <input type="email" id="settings-email" placeholder="your@email.com">
             </div>
             <div class="f-group">
-              <label>Новый пароль (оставь пустым чтобы не менять)</label>
+              <label for="settings-password">Новый пароль (оставь пустым чтобы не менять)</label>
               <input type="password" id="settings-password" placeholder="Минимум 6 символов">
             </div>
             <button class="btn-save" data-action="save-profile">Сохранить изменения</button>
@@ -2059,12 +2053,12 @@
       </div>
       <div class="modal-body">
         <div class="f-group">
-          <label>Название трека *</label>
+          <label for="te-title">Название трека *</label>
           <input type="text" id="te-title" placeholder="Название трека">
         </div>
         <div class="f-row">
           <div class="f-group">
-            <label>Версия</label>
+            <label for="te-version">Версия</label>
             <select id="te-version">
               <option value="">Оригинал</option>
               <option value="Remix">Remix</option>
@@ -2076,7 +2070,7 @@
             </select>
           </div>
           <div class="f-group">
-            <label>Ненормативная лексика</label>
+            <label for="te-explicit">Ненормативная лексика</label>
             <select id="te-explicit">
               <option value="no">Нет</option>
               <option value="yes">Да (Explicit)</option>
@@ -2086,11 +2080,11 @@
         </div>
         <div class="f-row">
           <div class="f-group">
-            <label>Исполнитель (если отличается)</label>
+            <label for="te-artist">Исполнитель (если отличается)</label>
             <input type="text" id="te-artist" placeholder="Только если отличается от основного">
           </div>
           <div class="f-group">
-            <label>Feat.</label>
+            <label for="te-feat">Feat.</label>
             <input type="text" id="te-feat" placeholder="Если есть">
           </div>
         </div>
@@ -2100,30 +2094,30 @@
 
         <div class="f-row">
           <div class="f-group">
-            <label>Автор текста (лирик) *</label>
+            <label for="te-writer">Автор текста (лирик) *</label>
             <input type="text" id="te-writer" placeholder="Полное имя автора слов">
           </div>
           <div class="f-group">
-            <label>Композитор *</label>
+            <label for="te-composer">Композитор *</label>
             <input type="text" id="te-composer" placeholder="Автор музыки">
           </div>
         </div>
         <div class="f-row">
           <div class="f-group">
-            <label>Продюсер</label>
+            <label for="te-producer">Продюсер</label>
             <input type="text" id="te-producer" placeholder="Имя продюсера">
           </div>
           <div class="f-group">
-            <label>Аранжировщик</label>
+            <label for="te-arranger">Аранжировщик</label>
             <input type="text" id="te-arranger" placeholder="Если есть">
           </div>
         </div>
         <div class="f-group">
-          <label>ISRC (если есть)</label>
+          <label for="te-isrc">ISRC (если есть)</label>
           <input type="text" id="te-isrc" placeholder="Сгенерируем автоматически если пусто">
         </div>
         <div class="f-group">
-          <label>Текст песни</label>
+          <label for="te-lyrics">Текст песни</label>
           <textarea id="te-lyrics" placeholder="Вставь текст песни — это помогает попасть в Lyrics на платформах..." style="min-height:120px;"></textarea>
         </div>
         <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:20px;">
